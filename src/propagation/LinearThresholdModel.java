@@ -24,7 +24,6 @@ public class LinearThresholdModel extends PropagationModel {
 		for (Node node : sn.getNodes()){
 			// Crear LTMNode con un threshold aleatorio
 			LTMNode ltmNode = new LTMNode(node, Math.random());
-			System.out.println(ltmNode);
 			
 			// Agregar a la lista de nodos activos/inactivos
 			if (seedSet.contains(node)){
@@ -33,9 +32,6 @@ public class LinearThresholdModel extends PropagationModel {
 				inactives.add(ltmNode);
 			}
 		}
-		
-		System.out.println(" - Activos: " + actives.size());
-		System.out.println(" - Inactivos: " + inactives.size());
 		
 		Map<Node, Set<Edge>> edges = sn.getEdgeSet().getInverseEdges();
 		ltmEdges = new EdgeSet();
@@ -47,13 +43,22 @@ public class LinearThresholdModel extends PropagationModel {
 			
 			for (Edge edge : entry.getValue()){
 				ltmEdges.addEdge(new LTMEdge(edge, weight));
-				
-				System.out.println(edge + " - Peso " + weight);
 			}
 			
 		}
 		
-		step();
+		// Realizar proceso de spreading
+		int i = 1;
+		do {
+			System.out.println(" --------------- Step " + i + " ---------------");
+			System.out.println(" - Activos: " + actives.size());
+			System.out.println(" - Inactivos: " + inactives.size());
+			
+			i++;
+		} while (step());
+
+		System.out.println(" - No se activo ningun nodo. Propagacion finalizada");
+		System.out.println(" --------------------------------------");
 	}
 
 	@Override
@@ -86,10 +91,8 @@ public class LinearThresholdModel extends PropagationModel {
 			actives.add(node);
 		}
 		
-		System.out.println(" - Activos: " + actives.size());
-		System.out.println(" - Inactivos: " + inactives.size());
-		
-		return newActives.isEmpty();
+		// Si se activo algun nodo, es necesario seguir el proceso
+		return !newActives.isEmpty();
 	}
 
 }
