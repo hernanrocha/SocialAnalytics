@@ -1,22 +1,17 @@
-package propagation;
+package propagation.ltm;
 
-import struct.Node;
+import struct.Vertex;
 
-public class LTMNode extends Node {
+public class LTMVertex extends Vertex {
 
-	//private Node node;
 	private Double threshold;
 
-	public LTMNode(Node node, Double threshold){
-		super (node.getID());
+	public LTMVertex(Integer id, Double threshold){
+		super (id);
 		
 		this.threshold = threshold;
 	}
-
-	/*public Node getNode() {
-		return node;
-	}*/
-
+	
 	public Double getThreshold() {
 		return threshold;
 	}

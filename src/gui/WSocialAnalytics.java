@@ -9,10 +9,10 @@ import javax.swing.JFrame;
 
 import parser.FileParser;
 import parser.SimpleFileParser;
-import propagation.LinearThresholdModel;
 import propagation.PropagationModel;
+import propagation.ltm.LinearThresholdModel;
 import struct.SocialNetwork;
-import struct.Node;
+import struct.Vertex;
 
 public class WSocialAnalytics {
 
@@ -28,22 +28,32 @@ public class WSocialAnalytics {
 					// Crear RedSocial (dirigida o no dirigida)
 					SocialNetwork sn = new SocialNetwork();
 					
+					
+					// CELF
+					File file = new File("dataset/celf/hep_LT2.inf");			
+					FileParser sfp = new SimpleFileParser();
+					
+					
 					// Cargar la red social desde un archivo
 					//File file = new File("dataset/wikipedia/Wiki-Vote.txt");
 					//File file = new File("dataset/collaboration/CA-CondMat.txt");
 					//File file = new File("dataset/collaboration/CA-AstroPh.txt");
-					//File file = new File("dataset/facebook/0.edges");				
-					File file = new File("dataset/prueba/prueba.txt");				
-					FileParser sfp = new SimpleFileParser();
+					//File file = new File("dataset/facebook/0.edges");
+					
+					//File file = new File("dataset/prueba/prueba.txt");				
+					//FileParser sfp = new SimpleFileParser();
+					
 					sfp.parseFile(file, sn);
 					
+					
 					// Armar un SeedSet inicial
-					Set<Node> seedSet = new HashSet<Node>();
-					/*seedSet.add(new Node(172));
-					seedSet.add(new Node(223));
-					seedSet.add(new Node(213));
-					seedSet.add(new Node(230));*/
-					seedSet.add(new Node(1));
+					Set<Vertex> seedSet = new HashSet<Vertex>();
+					// Facebook
+					seedSet.add(new Vertex(172));
+					seedSet.add(new Vertex(223));
+					seedSet.add(new Vertex(213));
+					seedSet.add(new Vertex(230));
+					//seedSet.add(new Node(1));
 					
 					// Realizar propagacion
 					PropagationModel propModel = new LinearThresholdModel();

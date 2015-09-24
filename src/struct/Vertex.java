@@ -1,5 +1,8 @@
 package struct;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /***
  * 
  * @author Hernan
@@ -7,15 +10,35 @@ package struct;
  * Se identifica mediante el campo Integer id
  *
  */
-public class Node {
+public class Vertex {
 
 	protected Integer id;
+	protected Set<Edge> inNeighbors = new HashSet<Edge>();
+	protected Set<Edge> outNeighbors = new HashSet<Edge>();
 
-	public Node(Integer id) {
+	public Vertex(Integer id) {
 		super();
+		
 		this.id = id;
 	}
+
+	// Neighbors	
+	public void addNeighbor(Edge edge) {
+		if (edge.getA().equals(this)){
+			outNeighbors.add(edge);
+		} else {
+			inNeighbors.add(edge);
+		}
+	}
 	
+	public Set<Edge> getInNeighbors() {
+		return inNeighbors;
+	}
+
+	public Set<Edge> getOutNeighbors() {
+		return outNeighbors;
+	}
+
 	public Integer getID() {
 		return id;
 	}
@@ -37,7 +60,7 @@ public class Node {
 		// Verificar que sea subclase
 		//if (getClass() != obj.getClass())
 		//	return false;
-		Node other = (Node) obj;
+		Vertex other = (Vertex) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -45,6 +68,8 @@ public class Node {
 			return false;
 		return true;
 	}
+	
+	
 
 	@Override
 	public String toString() {

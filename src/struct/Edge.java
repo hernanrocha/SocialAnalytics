@@ -2,19 +2,19 @@ package struct;
 
 public class Edge {
 
-	protected Node a, b;
+	protected Vertex a, b;
 
-	public Edge(Node a, Node b) {
+	public Edge(Vertex a, Vertex b) {
 		super();
 		this.a = a;
 		this.b = b;
 	}
 
-	public Node getA() {
+	public Vertex getA() {
 		return a;
 	}
 
-	public Node getB() {
+	public Vertex getB() {
 		return b;
 	}
 	

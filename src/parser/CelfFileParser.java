@@ -5,32 +5,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.StringTokenizer;
 
-import struct.Edge;
 import struct.SocialNetwork;
-import struct.Vertex;
 
-public class SimpleFileParser extends FileParser {
+public class CelfFileParser extends FileParser {
 
 	// TODO Line parser
 	LineParser lp = new LTMLineParser();
-	//LineParser lp = new LTMLineParser();
 	
 	@Override
 	public void parseFile(File file, SocialNetwork sn) {
-		System.out.println("[SimpleFileParser]");
+		System.out.println("[CelfFileParser]");
 		System.out.println(" Archivo: " + file.getName());
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String line;
 			
-			while((line = br.readLine()) != null ){	
-				// Las lineas con # al comienzo son comentarios
-				if (! line.startsWith("#")){
-					lp.parseLine(sn, line);
-				}
+			// No leer la primera linea
+			br.readLine();
+			
+			while((line = br.readLine()) != null ){
+				lp.parseLine(sn, line);
 			}
 
 			br.close();
@@ -44,4 +40,5 @@ public class SimpleFileParser extends FileParser {
 			e.printStackTrace();
 		}
 	}
+
 }

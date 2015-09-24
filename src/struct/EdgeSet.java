@@ -8,16 +8,16 @@ import java.util.Map.Entry;
 
 public class EdgeSet {	
 
-	public Map<Node, Set<Edge>> edges, inverse;
+	public Map<Vertex, Set<Edge>> edges, inverse;
 	
 	public EdgeSet(){
-		edges = new HashMap<Node, Set<Edge>>();
-		inverse = new HashMap<Node, Set<Edge>>();
+		edges = new HashMap<Vertex, Set<Edge>>();
+		inverse = new HashMap<Vertex, Set<Edge>>();
 	}
 	
 	public void addEdge(Edge edge){
-		Node a = edge.getA();
-		Node b = edge.getB();
+		Vertex a = edge.getA();
+		Vertex b = edge.getB();
 		
 		if (edges.containsKey(a)){
 			// 'a' ya tiene aristas			
@@ -44,7 +44,7 @@ public class EdgeSet {
 	@Override
 	public String toString() {
 		String st = "[EDGE-SET]" + System.lineSeparator();
-		for (Entry<Node, Set<Edge>> entry : edges.entrySet()){
+		for (Entry<Vertex, Set<Edge>> entry : edges.entrySet()){
 			st += entry.getKey() + ":";
 			for (Edge edge : entry.getValue()){
 				st += " " + edge.getB();
@@ -59,18 +59,18 @@ public class EdgeSet {
 		int edgeCount = 0;
 
 		// Contar la cantidad de aristas y dividir por dos (no es dirigido)
-		for (Entry<Node, Set<Edge>> entry : edges.entrySet()){
+		for (Entry<Vertex, Set<Edge>> entry : edges.entrySet()){
 			edgeCount += entry.getValue().size();
 		}
 		
 		return edgeCount;
 	}
 	
-	public Map<Node, Set<Edge>> getEdges(){
+	public Map<Vertex, Set<Edge>> getEdges(){
 		return edges;
 	}
 	
-	public Map<Node, Set<Edge>> getInverseEdges(){
+	public Map<Vertex, Set<Edge>> getInverseEdges(){
 		return inverse;
 	}
 }

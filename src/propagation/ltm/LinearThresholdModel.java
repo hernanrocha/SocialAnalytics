@@ -1,50 +1,34 @@
-package propagation;
+package propagation.ltm;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import propagation.PropagationModel;
 import struct.Edge;
 import struct.EdgeSet;
 import struct.SocialNetwork;
-import struct.Node;
+import struct.Vertex;
 
 public class LinearThresholdModel extends PropagationModel {
-	protected Set<LTMNode> actives, inactives;
-	protected EdgeSet ltmEdges;
+	protected Set<LTMVertex> actives, inactives;
 
 	@Override
-	public void propagate(SocialNetwork sn, Set<Node> seedSet) {
+	public void propagate(SocialNetwork sn, Set<Vertex> seedSet) {
 		System.out.println("[Modelo de Propagacion Linear Threshold]");
 		
-		actives = new HashSet<LTMNode>();
-		inactives = new HashSet<LTMNode>();
+		actives = new HashSet<LTMVertex>();
+		inactives = new HashSet<LTMVertex>();
 		
-		for (Node node : sn.getNodes()){
-			// Crear LTMNode con un threshold aleatorio
-			LTMNode ltmNode = new LTMNode(node, Math.random());
-			
+		// Agregar a lista de activos e inactivos
+		for (Vertex node : sn.getVertices()){			
 			// Agregar a la lista de nodos activos/inactivos
 			if (seedSet.contains(node)){
-				actives.add(ltmNode);
+				actives.add((LTMVertex) node);
 			} else {
-				inactives.add(ltmNode);
+				inactives.add((LTMVertex) node);
 			}
-		}
-		
-		Map<Node, Set<Edge>> edges = sn.getEdgeSet().getInverseEdges();
-		ltmEdges = new EdgeSet();
-		
-		// Recorrer la lista invertida
-		for (Entry<Node, Set<Edge>> entry : edges.entrySet()){			
-			// Calcular peso (1 / [Cantidad de nodos que influyen sobre el])
-			Double weight =  1 / (double) entry.getValue().size();
-			
-			for (Edge edge : entry.getValue()){
-				ltmEdges.addEdge(new LTMEdge(edge, weight));
-			}
-			
 		}
 		
 		// Realizar proceso de spreading
@@ -63,19 +47,17 @@ public class LinearThresholdModel extends PropagationModel {
 
 	@Override
 	public Boolean step() {
-		Set<LTMNode> newActives = new HashSet<LTMNode>();
+		Set<LTMVertex> newActives = new HashSet<LTMVertex>();
 		
 		// Buscar nuevos nodos para activar
-		for (LTMNode node : inactives){
-			Set<Edge> neighbors = ltmEdges.getInverseEdges().get(node);
+		for (LTMVertex node : inactives){
+			Set<Edge> neighbors = node.getInNeighbors();
 			Double influence = 0.0;
 			
-			if (neighbors != null){
-				for (Edge edge : neighbors){
-					// Sumar la influencia de los nodos vecinos ya activos
-					if (actives.contains(edge.getA())){
-						influence += ((LTMEdge) edge).getWeight();
-					}
+			for (Edge edge : neighbors){
+				// Sumar la influencia de los nodos vecinos ya activos
+				if (actives.contains(edge.getA())){
+					influence += ((LTMEdge) edge).getWeight();
 				}
 			}
 			
@@ -86,7 +68,7 @@ public class LinearThresholdModel extends PropagationModel {
 		}
 		
 		// Pasar de inactivos a activos
-		for (LTMNode node : newActives){
+		for (LTMVertex node : newActives){
 			inactives.remove(node);
 			actives.add(node);
 		}
