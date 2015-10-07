@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import propagation.ltm.LTMLineParser;
 import struct.SocialNetwork;
 
 public class CelfFileParser extends FileParser {

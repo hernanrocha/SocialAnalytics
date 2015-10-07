@@ -7,7 +7,7 @@ import struct.Vertex;
 
 public abstract class PropagationModel {
 	
-	public abstract void propagate(SocialNetwork sn, Set<Vertex> seedSet);
+	public abstract Integer propagate(SocialNetwork sn, Set<Vertex> seedSet);
 	
 	public abstract Boolean step();
 }

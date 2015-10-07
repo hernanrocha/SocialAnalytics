@@ -1,13 +1,10 @@
 package propagation.ltm;
 
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import propagation.PropagationModel;
 import struct.Edge;
-import struct.EdgeSet;
 import struct.SocialNetwork;
 import struct.Vertex;
 
@@ -15,7 +12,7 @@ public class LinearThresholdModel extends PropagationModel {
 	protected Set<LTMVertex> actives, inactives;
 
 	@Override
-	public void propagate(SocialNetwork sn, Set<Vertex> seedSet) {
+	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
 		System.out.println("[Modelo de Propagacion Linear Threshold]");
 		
 		actives = new HashSet<LTMVertex>();
@@ -43,6 +40,8 @@ public class LinearThresholdModel extends PropagationModel {
 
 		System.out.println(" - No se activo ningun nodo. Propagacion finalizada");
 		System.out.println(" --------------------------------------");
+		
+		return actives.size();
 	}
 
 	@Override

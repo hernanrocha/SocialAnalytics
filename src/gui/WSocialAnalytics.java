@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import parser.FileParser;
 import parser.SimpleFileParser;
 import propagation.PropagationModel;
+import propagation.icm.IndependentCascadeModel;
 import propagation.ltm.LinearThresholdModel;
 import struct.SocialNetwork;
 import struct.Vertex;
@@ -56,7 +57,8 @@ public class WSocialAnalytics {
 					//seedSet.add(new Node(1));
 					
 					// Realizar propagacion
-					PropagationModel propModel = new LinearThresholdModel();
+					//PropagationModel propModel = new LinearThresholdModel();
+					PropagationModel propModel = new IndependentCascadeModel();
 					propModel.propagate(sn, seedSet);
 					
 					//if (sn != null)

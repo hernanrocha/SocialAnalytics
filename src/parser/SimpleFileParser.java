@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import propagation.ltm.LTMLineParser;
 import struct.Edge;
 import struct.SocialNetwork;
 import struct.Vertex;
