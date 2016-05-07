@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import propagation.PropagationModel;
-import propagation.ltm.LTMEdge;
 import propagation.ltm.LTMVertex;
 import struct.Edge;
 import struct.Vertex;
@@ -17,7 +16,6 @@ public class IndependentCascadeModel extends PropagationModel {
 	
 	@Override
 	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
-		// TODO Auto-generated method stub
 		System.out.println("[Modelo de Propagacion Independent Cascade]");
 		
 		actives = new HashSet<LTMVertex>();
@@ -27,6 +25,7 @@ public class IndependentCascadeModel extends PropagationModel {
 		for (Vertex node : sn.getVertices()){			
 			// Agregar a la lista de nodos activos/inactivos
 			if (seedSet.contains(node)){
+				//System.out.println(" - Activar " + node);
 				target.add((LTMVertex) node);
 			}
 		}
@@ -41,14 +40,15 @@ public class IndependentCascadeModel extends PropagationModel {
 			for (Edge edge : neighbors){
 				Double random = Math.random();
 				LTMVertex neighbor = (LTMVertex) edge.getB();
-				if ( !actives.contains(neighbor) && random <= ((LTMEdge) edge).getWeight() ){
-					System.out.println("Activo a " + neighbor);
+				if ( !actives.contains(neighbor) && random <= edge.getWeight() ){
+					//System.out.println(" - Activar " + neighbor);
 					target.push(neighbor);
 				}
 			}    
-			System.out.println(" - Activos: " + actives.size());
+			//System.out.println("Activos procesados: " + actives.size());
         }
 		
+		System.out.println(" Propagacion total:" + actives.size());
 		return actives.size();
 	}
 

@@ -18,12 +18,12 @@ public class LinearThresholdModel extends PropagationModel {
 		actives = new HashSet<LTMVertex>();
 		inactives = new HashSet<LTMVertex>();
 		
-		// Agregar a lista de activos e inactivos
 		for (Vertex node : sn.getVertices()){			
-			// Agregar a la lista de nodos activos/inactivos
 			if (seedSet.contains(node)){
+				// Agregar los seeds a la lista de nodos activos
 				actives.add((LTMVertex) node);
 			} else {
+				// Agregar el resto de los nodos a la lista de inactivos
 				inactives.add((LTMVertex) node);
 			}
 		}
@@ -56,7 +56,7 @@ public class LinearThresholdModel extends PropagationModel {
 			for (Edge edge : neighbors){
 				// Sumar la influencia de los nodos vecinos ya activos
 				if (actives.contains(edge.getA())){
-					influence += ((LTMEdge) edge).getWeight();
+					influence += edge.getWeight();
 				}
 			}
 			

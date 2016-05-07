@@ -5,17 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.StringTokenizer;
 
-import propagation.ltm.LTMLineParser;
-import struct.Edge;
 import struct.SocialNetwork;
-import struct.Vertex;
 
 public class SimpleFileParser extends FileParser {
 
 	// TODO Line parser
-	LineParser lp = new LTMLineParser();
+	LineParser lp = new SimpleLineParser();
 	//LineParser lp = new LTMLineParser();
 	
 	@Override

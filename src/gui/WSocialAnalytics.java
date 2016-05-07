@@ -7,6 +7,10 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import algorithm.MaximizationAlgorithm;
+import algorithm.MontecarloCalculator;
+import algorithm.RandomAlgorithm;
+import algorithm.SpreadCalculator;
 import parser.FileParser;
 import parser.SimpleFileParser;
 import propagation.PropagationModel;
@@ -31,7 +35,7 @@ public class WSocialAnalytics {
 					
 					
 					// CELF
-					File file = new File("dataset/celf/hep_LT2.inf");			
+					File file = new File("dataset/celf/hep_WC.inf");			
 					FileParser sfp = new SimpleFileParser();
 					
 					
@@ -63,6 +67,12 @@ public class WSocialAnalytics {
 					
 					//if (sn != null)
 					//	return;
+					
+					MaximizationAlgorithm algorithm = new RandomAlgorithm();
+					//algorithm.maximize(sn, 5);
+					
+					SpreadCalculator spread = new MontecarloCalculator();
+					System.out.println("SPREAD: " + spread.calculateSpread(sn, seedSet, propModel));
 					
 					WSocialAnalytics window = new WSocialAnalytics();
 					window.frame.setVisible(true);
