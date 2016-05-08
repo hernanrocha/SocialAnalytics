@@ -20,6 +20,10 @@ import propagation.icm.IndependentCascadeModel;
 import struct.SocialNetwork;
 import struct.Vertex;
 import javax.swing.JMenuBar;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -55,26 +59,6 @@ public class WSocialAnalytics {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//SocialNetwork sn = new SocialNetwork();
-					
-					
-					// CELF
-					//File file = new File("dataset/celf/hep_WC.inf");			
-					//FileParser sfp = new SimpleFileParser();
-					
-					
-					// Cargar la red social desde un archivo
-					//File file = new File("dataset/wikipedia/Wiki-Vote.txt");
-					//File file = new File("dataset/collaboration/CA-CondMat.txt");
-					//File file = new File("dataset/collaboration/CA-AstroPh.txt");
-					//File file = new File("dataset/facebook/0.edges");
-					
-					//File file = new File("dataset/prueba/prueba.txt");				
-					//FileParser sfp = new SimpleFileParser();
-					
-					//sfp.parseFile(file, sn);
-					
-					
 					// Armar un SeedSet inicial
 					Set<Vertex> seedSet = new HashSet<Vertex>();
 					// Facebook
@@ -118,7 +102,15 @@ public class WSocialAnalytics {
 		fileParsers.add(new SimpleFileParser());
 		fileParsers.add(new CelfFileParser());
 		
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		
 		initialize();
+		
+
 	}
 
 	/**
