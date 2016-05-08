@@ -7,15 +7,14 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import algorithm.CelfAlgorithm;
 import algorithm.MaximizationAlgorithm;
-import algorithm.MontecarloCalculator;
-import algorithm.RandomAlgorithm;
-import algorithm.SpreadCalculator;
+import algorithm.spread.MontecarloCalculator;
+import algorithm.spread.SpreadCalculator;
 import parser.FileParser;
 import parser.SimpleFileParser;
 import propagation.PropagationModel;
 import propagation.icm.IndependentCascadeModel;
-import propagation.ltm.LinearThresholdModel;
 import struct.SocialNetwork;
 import struct.Vertex;
 
@@ -68,11 +67,14 @@ public class WSocialAnalytics {
 					//if (sn != null)
 					//	return;
 					
-					MaximizationAlgorithm algorithm = new RandomAlgorithm();
-					//algorithm.maximize(sn, 5);
 					
 					SpreadCalculator spread = new MontecarloCalculator();
-					System.out.println("SPREAD: " + spread.calculateSpread(sn, seedSet, propModel));
+					//System.out.println("SPREAD: " + spread.calculateSpread(sn, seedSet, propModel));
+
+					MaximizationAlgorithm algorithm;
+					//algorithm = new RandomAlgorithm();
+					algorithm = new CelfAlgorithm();
+					algorithm.maximize(sn, spread, propModel, 5);
 					
 					WSocialAnalytics window = new WSocialAnalytics();
 					window.frame.setVisible(true);

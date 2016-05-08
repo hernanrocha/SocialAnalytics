@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.spread;
 
 import java.util.Set;
 
@@ -7,7 +7,7 @@ import struct.SocialNetwork;
 import struct.Vertex;
 
 public class MontecarloCalculator extends SpreadCalculator {
-	private static final int DEFAULT_RUNS = 50;
+	private static final int DEFAULT_RUNS = 1;
 	
 	int runs = DEFAULT_RUNS;
 

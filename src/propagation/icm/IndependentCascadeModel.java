@@ -16,7 +16,7 @@ public class IndependentCascadeModel extends PropagationModel {
 	
 	@Override
 	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
-		System.out.println("[Modelo de Propagacion Independent Cascade]");
+		//System.out.println("[Modelo de Propagacion Independent Cascade]");
 		
 		actives = new HashSet<LTMVertex>();
 		target = new Stack<LTMVertex>();
@@ -48,7 +48,7 @@ public class IndependentCascadeModel extends PropagationModel {
 			//System.out.println("Activos procesados: " + actives.size());
         }
 		
-		System.out.println(" Propagacion total:" + actives.size());
+		//System.out.println(" Propagacion total:" + actives.size());
 		return actives.size();
 	}
 

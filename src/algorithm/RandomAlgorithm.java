@@ -5,13 +5,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+import algorithm.spread.SpreadCalculator;
+import propagation.PropagationModel;
 import struct.SocialNetwork;
 import struct.Vertex;
 
 public class RandomAlgorithm extends MaximizationAlgorithm {
 
 	@Override
-	public Set<Vertex> maximize(SocialNetwork sn, Integer n) {
+	public Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n) {
 		System.out.println("[Random Algorithm]");
 
 		Set<Vertex> vertices = sn.getVertices();
