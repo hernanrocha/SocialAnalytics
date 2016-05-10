@@ -12,16 +12,6 @@ import struct.SocialNetwork;
 import struct.Vertex;
 
 public class CelfAlgorithm extends MaximizationAlgorithm {
-
-	public Double getMarginal(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Set<Vertex> vertices, Vertex vertex){
-		Double preSpread = spread.calculateSpread(sn, vertices, model);
-		
-		vertices.add(vertex);
-		Double posSpread = spread.calculateSpread(sn, vertices, model);
-		vertices.remove(vertex);
-		
-		return posSpread - preSpread;
-	}
 	
 	@Override
 	public Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n) {
@@ -40,7 +30,7 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 			Set<Vertex> seedSet = new HashSet<Vertex>();
 			seedSet.add(v);
 			
-			// TODO Utilizar algoritmo de calculo de spread para calcular marginal
+			// Utilizar algoritmo de calculo de spread para calcular marginal
 			Double marginal = spread.calculateSpread(sn, seedSet, model);
 			marginals.add(new CelfVertex(v, marginal));			
 		}

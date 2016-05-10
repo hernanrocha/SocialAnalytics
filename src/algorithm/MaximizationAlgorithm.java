@@ -13,4 +13,14 @@ public abstract class MaximizationAlgorithm {
 	// que maximicen la influencia sobre la red
 	public abstract Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n);
 	
+	public Double getMarginal(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Set<Vertex> vertices, Vertex vertex){
+		Double preSpread = spread.calculateSpread(sn, vertices, model);
+		
+		vertices.add(vertex);
+		Double posSpread = spread.calculateSpread(sn, vertices, model);
+		vertices.remove(vertex);
+		
+		return posSpread - preSpread;
+	}
+	
 }

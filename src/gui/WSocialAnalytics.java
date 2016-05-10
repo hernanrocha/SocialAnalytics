@@ -38,6 +38,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 public class WSocialAnalytics {
 
@@ -51,6 +53,7 @@ public class WSocialAnalytics {
 	private JLabel lblFile;
 	private JComboBox comboFileParser;
 	private JButton btnParse;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -59,23 +62,23 @@ public class WSocialAnalytics {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					SocialNetwork sn = new SocialNetwork();
+					File file = new File("dataset/celf/hep_WC.inf");
+					FileParser fileParser = new SimpleFileParser();
+					
+					fileParser.parseFile(file, sn);
+					
 					// Armar un SeedSet inicial
-					Set<Vertex> seedSet = new HashSet<Vertex>();
-					// Facebook
-					seedSet.add(new Vertex(172));
-					seedSet.add(new Vertex(223));
-					seedSet.add(new Vertex(213));
-					seedSet.add(new Vertex(230));
-					//seedSet.add(new Node(1));
+					Set<Vertex> seedSet = new HashSet<Vertex>();					
+					seedSet.add(sn.getVertex(172));
+					seedSet.add(sn.getVertex(223));
+					seedSet.add(sn.getVertex(213));
+					seedSet.add(sn.getVertex(230));
 					
 					// Realizar propagacion
 					//PropagationModel propModel = new LinearThresholdModel();
 					PropagationModel propModel = new IndependentCascadeModel();
 					//propModel.propagate(sn, seedSet);
-					
-					//if (sn != null)
-					//	return;
-					
 					
 					SpreadCalculator spread = new MontecarloCalculator();
 					//System.out.println("SPREAD: " + spread.calculateSpread(sn, seedSet, propModel));
@@ -124,10 +127,10 @@ public class WSocialAnalytics {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 59, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		lblFile = new JLabel("Ningun archivo.");
@@ -162,7 +165,7 @@ public class WSocialAnalytics {
 		comboFileParser.setSelectedIndex(-1);
 		comboFileParser.setSelectedIndex(0);
 		GridBagConstraints gbc_comboFileParser = new GridBagConstraints();
-		gbc_comboFileParser.insets = new Insets(0, 0, 0, 5);
+		gbc_comboFileParser.insets = new Insets(0, 0, 5, 5);
 		gbc_comboFileParser.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboFileParser.gridx = 0;
 		gbc_comboFileParser.gridy = 1;
@@ -175,9 +178,19 @@ public class WSocialAnalytics {
 			}
 		});
 		GridBagConstraints gbc_btnParse = new GridBagConstraints();
+		gbc_btnParse.insets = new Insets(0, 0, 5, 0);
 		gbc_btnParse.gridx = 1;
 		gbc_btnParse.gridy = 1;
 		frame.getContentPane().add(btnParse, gbc_btnParse);
+		
+		panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "Archivo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 0, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 2;
+		frame.getContentPane().add(panel, gbc_panel);
 	}
 
 	protected void openFile() {
