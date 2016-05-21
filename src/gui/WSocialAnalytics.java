@@ -69,7 +69,7 @@ public class WSocialAnalytics {
 					log.error("HOLA");
 					
 					SocialNetwork sn = new SocialNetwork();
-					File file = new File("dataset/celf/hep_WC.inf");
+					File file = new File("dataset/celf/hep_C.inf");
 					FileParser fileParser = new SimpleFileParser();
 					
 					fileParser.parseFile(file, sn);

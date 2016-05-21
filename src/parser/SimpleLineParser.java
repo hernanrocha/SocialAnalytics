@@ -2,12 +2,16 @@ package parser;
 
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 import propagation.ltm.LTMVertex;
 import struct.Edge;
 import struct.SocialNetwork;
 import struct.Vertex;
 
 public class SimpleLineParser extends LineParser {
+
+	static Logger log = Logger.getLogger(SimpleFileParser.class.getName());
 
 	@Override
 	public void parseLine(SocialNetwork sn, String line) {
@@ -45,7 +49,7 @@ public class SimpleLineParser extends LineParser {
 			}
 			
 		} else {
-			System.err.println(" - Linea invalida");
+			log.error("Linea invalida");
 		}
 	}
 
