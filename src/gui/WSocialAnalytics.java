@@ -68,9 +68,7 @@ public class WSocialAnalytics {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					log.error("HOLA");
-					
+				try {					
 					SocialNetwork sn = new SocialNetwork();
 					File file = new File("dataset/celf/hep_WC.inf");
 					FileParser fileParser = new SimpleFileParser();
