@@ -13,13 +13,17 @@ import java.util.Set;
 public class Vertex {
 
 	protected Integer id;
+	protected Double threshold;
 	protected Set<Edge> inNeighbors = new HashSet<Edge>();
 	protected Set<Edge> outNeighbors = new HashSet<Edge>();
 
-	public Vertex(Integer id) {
-		super();
-		
+	public Vertex(Integer id, Double threshold){
 		this.id = id;
+		this.threshold = threshold;
+	}
+	
+	public Vertex(Integer id) {
+		this(id, Math.random());
 	}
 
 	// Neighbors	
@@ -41,6 +45,10 @@ public class Vertex {
 
 	public Integer getID() {
 		return id;
+	}
+	
+	public Double getThreshold() {
+		return threshold;
 	}
 
 	@Override

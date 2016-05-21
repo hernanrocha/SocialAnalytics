@@ -11,20 +11,18 @@ import org.apache.log4j.Logger;
 import struct.SocialNetwork;
 
 /**
- * @author HERNAN
- * Implementacion de FileParser para datasets del algoritmo CELF.
+ * Implementacion de FileParser para datasets del algoritmo CELF. 
  * La primera linea es considerada como un comentario y no es analizada.
+ * 
+ * @author Hernan Rocha
  *
  */
 public class CelfFileParser extends FileParser {
 
 	static Logger log = Logger.getLogger(SimpleFileParser.class.getName());
 	
-	// Line parser
-	LineParser lp = new SimpleLineParser();
-	
 	@Override
-	public void parseFile(File file, SocialNetwork sn) {
+	public void parseFile(File file, LineParser lp, SocialNetwork sn) {
 		log.info("Archivo: " + file.getName());
 		
 		try {
@@ -43,7 +41,7 @@ public class CelfFileParser extends FileParser {
 			
 			log.info("Archivo parseado correctamente");
 			log.info(" * Vertices: " + sn.getVerticesCount());
-			log.info(" *  Aristas: " + sn.getEdgeCount());
+			log.info(" * Aristas: " + sn.getEdgeCount());
 		} catch (FileNotFoundException e) {
 			log.error(e);
 			e.printStackTrace();

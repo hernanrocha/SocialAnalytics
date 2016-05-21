@@ -22,8 +22,16 @@ public class SocialNetwork {
 	
 	// ------ Vertices -----
 	
-	public void addVertex(Vertex vertex) {
-		vertices.put(vertex.getID(), vertex);		
+	public Vertex addVertex(Vertex vertex) {
+		Vertex v = vertices.get(vertex.getID());
+		if (v == null){
+			// Es un vertice nuevo, agregarlo a la lista
+			vertices.put(vertex.getID(), vertex);
+			return vertex;
+		}
+		
+		// El vertice ya existe
+		return v;
 	}
 	
 	public Integer getVerticesCount() {

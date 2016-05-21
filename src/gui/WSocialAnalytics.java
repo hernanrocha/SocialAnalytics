@@ -14,7 +14,9 @@ import algorithm.spread.MontecarloCalculator;
 import algorithm.spread.SpreadCalculator;
 import parser.CelfFileParser;
 import parser.FileParser;
+import parser.LineParser;
 import parser.SimpleFileParser;
+import parser.SimpleLineParser;
 import propagation.PropagationModel;
 import propagation.icm.IndependentCascadeModel;
 import struct.SocialNetwork;
@@ -52,6 +54,7 @@ public class WSocialAnalytics {
 	private File file;
 	private FileParser fileParser;
 	private Vector<FileParser> fileParsers;
+	private Vector<LineParser> lineParsers;
 	private SocialNetwork sn;
 
 	private JLabel lblFile;
@@ -69,10 +72,11 @@ public class WSocialAnalytics {
 					log.error("HOLA");
 					
 					SocialNetwork sn = new SocialNetwork();
-					File file = new File("dataset/celf/hep_C.inf");
+					File file = new File("dataset/celf/hep_WC.inf");
 					FileParser fileParser = new SimpleFileParser();
+					LineParser lineParser = new SimpleLineParser();
 					
-					fileParser.parseFile(file, sn);
+					fileParser.parseFile(file, lineParser, sn);
 					
 					// Armar un SeedSet inicial
 					Set<Vertex> seedSet = new HashSet<Vertex>();					
@@ -110,6 +114,9 @@ public class WSocialAnalytics {
 		fileParsers = new Vector<FileParser>();
 		fileParsers.add(new SimpleFileParser());
 		fileParsers.add(new CelfFileParser());
+		
+		lineParsers = new Vector<LineParser>();
+		lineParsers.add(new SimpleLineParser());
 		
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -222,7 +229,7 @@ public class WSocialAnalytics {
 	protected void parseSocialNetwork() {
 		// Crear RedSocial (dirigida o no dirigida)
 		sn = new SocialNetwork();
-		fileParser.parseFile(file, sn);
+		fileParser.parseFile(file, lineParsers.elementAt(0), sn);
 	}
 
 }

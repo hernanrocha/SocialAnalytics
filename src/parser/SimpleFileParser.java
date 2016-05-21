@@ -11,19 +11,18 @@ import org.apache.log4j.Logger;
 import struct.SocialNetwork;
 
 /**
- * @author HERNAN
- * Implementacion de FileParser basico.
+ * Implementacion de FileParser basico. 
  * Las lineas que comienzan con un '#' son consideradas como un comentario y no son analizadas.
+ * 
+ * @author Hernan Rocha
  *
  */
 public class SimpleFileParser extends FileParser {
 
 	static Logger log = Logger.getLogger(SimpleFileParser.class.getName());
 	
-	LineParser lp = new SimpleLineParser();
-	
 	@Override
-	public void parseFile(File file, SocialNetwork sn) {
+	public void parseFile(File file, LineParser lp, SocialNetwork sn) {
 		log.info("Archivo: " + file.getName());
 		
 		try {
@@ -42,7 +41,7 @@ public class SimpleFileParser extends FileParser {
 			
 			log.info("Archivo parseado correctamente");
 			log.info(" * Vertices: " + sn.getVerticesCount());
-			log.info(" *  Aristas: " + sn.getEdgeCount());
+			log.info(" * Aristas: " + sn.getEdgeCount());
 		} catch (FileNotFoundException e) {
 			log.error(e);
 			e.printStackTrace();

@@ -9,22 +9,22 @@ import struct.SocialNetwork;
 import struct.Vertex;
 
 public class LinearThresholdModel extends PropagationModel {
-	protected Set<LTMVertex> actives, inactives;
+	protected Set<Vertex> actives, inactives;
 
 	@Override
 	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
 		System.out.println("[Modelo de Propagacion Linear Threshold]");
 		
-		actives = new HashSet<LTMVertex>();
-		inactives = new HashSet<LTMVertex>();
+		actives = new HashSet<Vertex>();
+		inactives = new HashSet<Vertex>();
 		
 		for (Vertex node : sn.getVertices()){			
 			if (seedSet.contains(node)){
 				// Agregar los seeds a la lista de nodos activos
-				actives.add((LTMVertex) node);
+				actives.add((Vertex) node);
 			} else {
 				// Agregar el resto de los nodos a la lista de inactivos
-				inactives.add((LTMVertex) node);
+				inactives.add((Vertex) node);
 			}
 		}
 		
@@ -46,10 +46,10 @@ public class LinearThresholdModel extends PropagationModel {
 
 	@Override
 	public Boolean step() {
-		Set<LTMVertex> newActives = new HashSet<LTMVertex>();
+		Set<Vertex> newActives = new HashSet<Vertex>();
 		
 		// Buscar nuevos nodos para activar
-		for (LTMVertex node : inactives){
+		for (Vertex node : inactives){
 			Set<Edge> neighbors = node.getInNeighbors();
 			Double influence = 0.0;
 			
@@ -67,7 +67,7 @@ public class LinearThresholdModel extends PropagationModel {
 		}
 		
 		// Pasar de inactivos a activos
-		for (LTMVertex node : newActives){
+		for (Vertex node : newActives){
 			inactives.remove(node);
 			actives.add(node);
 		}
