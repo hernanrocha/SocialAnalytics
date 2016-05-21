@@ -8,6 +8,12 @@ import java.io.IOException;
 
 import struct.SocialNetwork;
 
+/**
+ * @author HERNAN
+ * Implementacion de FileParser para datasets del algoritmo CELF.
+ * La primera linea es considerada como un comentario y no es analizada.
+ *
+ */
 public class CelfFileParser extends FileParser {
 
 	// Line parser

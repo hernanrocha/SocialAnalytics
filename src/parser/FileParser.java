@@ -6,7 +6,7 @@ import struct.SocialNetwork;
 
 /***
  * 
- * @author Hernan
+ * @author HERNAN
  * Clase abstracta que carga una red social a partir de un archivo
  *
  */

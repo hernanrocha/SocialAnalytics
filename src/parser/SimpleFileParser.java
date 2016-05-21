@@ -6,18 +6,27 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import struct.SocialNetwork;
 
+/**
+ * @author HERNAN
+ * Implementacion de FileParser basico.
+ * Las lineas que comienzan con un '#' son consideradas como un comentario y no son analizadas.
+ *
+ */
 public class SimpleFileParser extends FileParser {
 
-	// TODO Line parser
+	static Logger log = Logger.getLogger(SimpleFileParser.class.getName());
+	
 	LineParser lp = new SimpleLineParser();
-	//LineParser lp = new LTMLineParser();
 	
 	@Override
 	public void parseFile(File file, SocialNetwork sn) {
+		log.info(" Archivo: " + file.getName());
 		System.out.println("[SimpleFileParser]");
-		System.out.println(" Archivo: " + file.getName());
+		System.out.println();
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);

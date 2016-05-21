@@ -24,6 +24,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import org.apache.log4j.Logger;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -41,7 +43,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-public class WSocialAnalytics {
+public class WSocialAnalytics {	
+
+	static Logger log = Logger.getLogger(WSocialAnalytics.class.getName());
 
 	private JFrame frame;
 	
@@ -62,6 +66,8 @@ public class WSocialAnalytics {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					log.error("HOLA");
+					
 					SocialNetwork sn = new SocialNetwork();
 					File file = new File("dataset/celf/hep_WC.inf");
 					FileParser fileParser = new SimpleFileParser();
