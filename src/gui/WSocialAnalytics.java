@@ -1,18 +1,37 @@
 package gui;
 
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
+import org.apache.log4j.Logger;
 
 import algorithm.CelfAlgorithm;
 import algorithm.MaximizationAlgorithm;
 import algorithm.spread.MontecarloCalculator;
 import algorithm.spread.SpreadCalculator;
 import parser.CelfFileParser;
+import parser.FbCircleLineParser;
 import parser.FileParser;
 import parser.LineParser;
 import parser.SimpleFileParser;
@@ -21,46 +40,25 @@ import propagation.IndependentCascadeModel;
 import propagation.PropagationModel;
 import struct.SocialNetwork;
 import struct.Vertex;
-import javax.swing.JMenuBar;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
-import org.apache.log4j.Logger;
-
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
 public class WSocialAnalytics {	
 
 	static Logger log = Logger.getLogger(WSocialAnalytics.class.getName());
 
-	private JFrame frame;
+	private JFrame frmSocialAnalytics;
 	
 	private File file;
-	private FileParser fileParser;
 	private Vector<FileParser> fileParsers;
 	private Vector<LineParser> lineParsers;
 	private SocialNetwork sn;
 
 	private JLabel lblFile;
 	private JComboBox comboFileParser;
+	private JComboBox comboLineParser;
 	private JButton btnParse;
 	private JPanel panel;
+	private JLabel lblFileParser;
+	private JLabel lblLineParser;
 
 	/**
 	 * Launch the application.
@@ -97,7 +95,7 @@ public class WSocialAnalytics {
 					//algorithm.maximize(sn, spread, propModel, 5);
 					
 					WSocialAnalytics window = new WSocialAnalytics();
-					window.frame.setVisible(true);
+					window.frmSocialAnalytics.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -115,6 +113,7 @@ public class WSocialAnalytics {
 		
 		lineParsers = new Vector<LineParser>();
 		lineParsers.add(new SimpleLineParser());
+		lineParsers.add(new FbCircleLineParser());
 		
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -131,77 +130,105 @@ public class WSocialAnalytics {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSocialAnalytics = new JFrame();
+		frmSocialAnalytics.setTitle("Social Analytics");
+		frmSocialAnalytics.setBounds(100, 100, 450, 300);
+		frmSocialAnalytics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmSocialAnalytics.setJMenuBar(menuBar);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 59, 0};
+		gridBagLayout.columnWidths = new int[]{0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
-		frame.getContentPane().setLayout(gridBagLayout);
+		frmSocialAnalytics.getContentPane().setLayout(gridBagLayout);
 		
-		lblFile = new JLabel("Ningun archivo.");
+		panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "Archivo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 0;
+		frmSocialAnalytics.getContentPane().add(panel, gbc_panel);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+		
+		lblFile = new JLabel("Ningun archivo seleccionado");
 		GridBagConstraints gbc_lblFile = new GridBagConstraints();
+		gbc_lblFile.anchor = GridBagConstraints.EAST;
+		gbc_lblFile.gridwidth = 2;
 		gbc_lblFile.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFile.gridx = 0;
 		gbc_lblFile.gridy = 0;
-		frame.getContentPane().add(lblFile, gbc_lblFile);
+		panel.add(lblFile, gbc_lblFile);
 		
-		JButton button = new JButton("...");
-		button.addActionListener(new ActionListener() {
+		JButton btnSelectFile = new JButton("...");
+		GridBagConstraints gbc_btnSelectFile = new GridBagConstraints();
+		gbc_btnSelectFile.insets = new Insets(0, 0, 5, 0);
+		gbc_btnSelectFile.gridx = 2;
+		gbc_btnSelectFile.gridy = 0;
+		panel.add(btnSelectFile, gbc_btnSelectFile);
+		btnSelectFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				openFile();
 			}
 		});
-		GridBagConstraints gbc_button = new GridBagConstraints();
-		gbc_button.insets = new Insets(0, 0, 5, 0);
-		gbc_button.gridx = 1;
-		gbc_button.gridy = 0;
-		frame.getContentPane().add(button, gbc_button);
+		
+		lblFileParser = new JLabel("File Parser");
+		GridBagConstraints gbc_lblFileParser = new GridBagConstraints();
+		gbc_lblFileParser.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFileParser.anchor = GridBagConstraints.EAST;
+		gbc_lblFileParser.gridx = 0;
+		gbc_lblFileParser.gridy = 1;
+		panel.add(lblFileParser, gbc_lblFileParser);
 		
 		comboFileParser = new JComboBox();
-		comboFileParser.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent item) {
-				if (item.getStateChange() == ItemEvent.SELECTED){
-					System.out.println("Seleccionado: " + comboFileParser.getSelectedIndex() + " - " + (String) item.getItem());
-					fileParser = fileParsers.elementAt(comboFileParser.getSelectedIndex());
-				}
-			}
-		});
 		comboFileParser.setModel(new DefaultComboBoxModel<String>(new String[] {"Simple", "CELF"}));
-		comboFileParser.setSelectedIndex(-1);
-		comboFileParser.setSelectedIndex(0);
 		GridBagConstraints gbc_comboFileParser = new GridBagConstraints();
-		gbc_comboFileParser.insets = new Insets(0, 0, 5, 5);
+		gbc_comboFileParser.gridwidth = 2;
 		gbc_comboFileParser.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboFileParser.gridx = 0;
+		gbc_comboFileParser.insets = new Insets(0, 0, 5, 0);
+		gbc_comboFileParser.gridx = 1;
 		gbc_comboFileParser.gridy = 1;
-		frame.getContentPane().add(comboFileParser, gbc_comboFileParser);
+		panel.add(comboFileParser, gbc_comboFileParser);
+		comboFileParser.setSelectedIndex(0);
+		
+		lblLineParser = new JLabel("Line Parser");
+		GridBagConstraints gbc_lblLineParser = new GridBagConstraints();
+		gbc_lblLineParser.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLineParser.anchor = GridBagConstraints.EAST;
+		gbc_lblLineParser.gridx = 0;
+		gbc_lblLineParser.gridy = 2;
+		panel.add(lblLineParser, gbc_lblLineParser);
+		
+		comboLineParser = new JComboBox();
+		comboLineParser.setModel(new DefaultComboBoxModel<String>(new String[] {"Simple", "Facebook Circles"}));
+		GridBagConstraints gbc_comboLineParser = new GridBagConstraints();
+		gbc_comboLineParser.gridwidth = 2;
+		gbc_comboLineParser.insets = new Insets(0, 0, 5, 0);
+		gbc_comboLineParser.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboLineParser.gridx = 1;
+		gbc_comboLineParser.gridy = 2;
+		panel.add(comboLineParser, gbc_comboLineParser);
+		comboLineParser.setSelectedIndex(0);
 		
 		btnParse = new JButton("Parsear");
+		GridBagConstraints gbc_btnParse = new GridBagConstraints();
+		gbc_btnParse.gridwidth = 3;
+		gbc_btnParse.gridx = 0;
+		gbc_btnParse.gridy = 3;
+		panel.add(btnParse, gbc_btnParse);
 		btnParse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				parseSocialNetwork();
 			}
 		});
-		GridBagConstraints gbc_btnParse = new GridBagConstraints();
-		gbc_btnParse.insets = new Insets(0, 0, 5, 0);
-		gbc_btnParse.gridx = 1;
-		gbc_btnParse.gridy = 1;
-		frame.getContentPane().add(btnParse, gbc_btnParse);
-		
-		panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Archivo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.insets = new Insets(0, 0, 0, 5);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 2;
-		frame.getContentPane().add(panel, gbc_panel);
 	}
 
 	protected void openFile() {
@@ -225,9 +252,20 @@ public class WSocialAnalytics {
 	}
 	
 	protected void parseSocialNetwork() {
-		// Crear RedSocial (dirigida o no dirigida)
+		// Crear RedSocial
 		sn = new SocialNetwork();
-		fileParser.parseFile(file, lineParsers.elementAt(0), sn);
+		FileParser fp = fileParsers.elementAt(comboFileParser.getSelectedIndex());
+		LineParser lp = lineParsers.elementAt(comboLineParser.getSelectedIndex());
+		
+		if (file == null) {
+			openFile();
+		}
+		
+		log.info("File: " + file.getName());
+		log.info("FileParser: " + fp.getClass().getName());
+		log.info("LineParser: " + lp.getClass().getName());
+		
+		fp.parseFile(file, lp, sn);
 	}
 
 }
