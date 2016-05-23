@@ -19,7 +19,7 @@ import struct.SocialNetwork;
  */
 public class CelfFileParser extends FileParser {
 
-	static Logger log = Logger.getLogger(SimpleFileParser.class.getName());
+	static Logger log = Logger.getLogger(CelfFileParser.class.getName());
 	
 	@Override
 	public void parseFile(File file, LineParser lp, SocialNetwork sn) {

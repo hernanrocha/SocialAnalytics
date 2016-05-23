@@ -10,7 +10,7 @@ import struct.Vertex;
 
 public class SimpleLineParser extends LineParser {
 
-	static Logger log = Logger.getLogger(SimpleFileParser.class.getName());
+	static Logger log = Logger.getLogger(SimpleLineParser.class.getName());
 
 	@Override
 	public void parseLine(SocialNetwork sn, String line) {
