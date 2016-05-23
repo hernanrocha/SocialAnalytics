@@ -3,16 +3,21 @@ package propagation;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import struct.Edge;
 import struct.SocialNetwork;
 import struct.Vertex;
 
 public class LinearThresholdModel extends PropagationModel {
+	
+	static Logger log = Logger.getLogger(LinearThresholdModel.class.getName());
+	
 	protected Set<Vertex> actives, inactives;
 
 	@Override
 	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
-		System.out.println("[Modelo de Propagacion Linear Threshold]");
+		log.trace("[Modelo de Propagacion Linear Threshold]");
 		
 		actives = new HashSet<Vertex>();
 		inactives = new HashSet<Vertex>();
@@ -30,15 +35,15 @@ public class LinearThresholdModel extends PropagationModel {
 		// Realizar proceso de spreading
 		int i = 1;
 		do {
-			System.out.println(" --------------- Step " + i + " ---------------");
-			System.out.println(" - Activos: " + actives.size());
-			System.out.println(" - Inactivos: " + inactives.size());
+			log.trace(" --------------- Step " + i + " ---------------");
+			log.trace(" - Activos: " + actives.size());
+			log.trace(" - Inactivos: " + inactives.size());
 			
 			i++;
 		} while (step());
 
-		System.out.println(" - No se activo ningun nodo. Propagacion finalizada");
-		System.out.println(" --------------------------------------");
+		log.trace(" - No se activo ningun nodo. Propagacion finalizada");
+		log.trace(" --------------------------------------");
 		
 		return actives.size();
 	}
@@ -51,16 +56,17 @@ public class LinearThresholdModel extends PropagationModel {
 		for (Vertex node : inactives){
 			Set<Edge> neighbors = node.getInNeighbors();
 			Double influence = 0.0;
-			
+
+			// Sumar la influencia de los nodos vecinos ya activos
 			for (Edge edge : neighbors){
-				// Sumar la influencia de los nodos vecinos ya activos
 				if (actives.contains(edge.getA())){
 					influence += edge.getWeight();
 				}
 			}
 			
+			// Si superan el threshold del nodo, pasar a lista de nodos a activar
 			if (influence > node.getThreshold()){				
-				System.out.println(influence + " > " + node.getThreshold() + ". Activo " + node);
+				log.trace(influence + " > " + node.getThreshold() + ". Activo " + node);
 				newActives.add(node);			
 			}
 		}
