@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="lib/apache-log4j-2.5-bin/log4j-core-2.5.jar;lib/apache-log4j-2.5-bin/log4j-api-2.5.jar;lib/apache-log4j-2.5-bin/log4j-1.2-api-2.5.jar;lib/apache-log4j-2.5-bin/log4j-iostreams-2.5.jar" destdir="doc" doctitle="Social Analytics" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="algorithm.spread,gui,algorithm,struct,parser,propagation" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>
