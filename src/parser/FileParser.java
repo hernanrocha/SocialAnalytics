@@ -13,6 +13,6 @@ import struct.SocialNetwork;
  */
 public abstract class FileParser {
 
-	public abstract void parseFile(File file, LineParser lp, SocialNetwork sn);
+	public abstract boolean parseFile(File file, LineParser lp, SocialNetwork sn);
 	
 }

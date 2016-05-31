@@ -22,7 +22,7 @@ public class CelfFileParser extends FileParser {
 	static Logger log = Logger.getLogger(CelfFileParser.class.getName());
 	
 	@Override
-	public void parseFile(File file, LineParser lp, SocialNetwork sn) {
+	public boolean parseFile(File file, LineParser lp, SocialNetwork sn) {
 		log.info("Archivo: " + file.getName());
 		
 		try {
@@ -39,16 +39,19 @@ public class CelfFileParser extends FileParser {
 
 			br.close();
 			
-			log.info("Archivo parseado correctamente");
-			log.info(" * Vertices: " + sn.getVerticesCount());
-			log.info(" * Aristas: " + sn.getEdgeCount());
+			return true;
 		} catch (FileNotFoundException e) {
 			log.error(e);
 			e.printStackTrace();
 		} catch (IOException e) {
 			log.error(e);
 			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
 		}
+		
+		return false;
 	}
 
 }

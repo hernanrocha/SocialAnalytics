@@ -44,6 +44,8 @@ import propagation.LinearThresholdModel;
 import propagation.PropagationModel;
 import struct.SocialNetwork;
 import struct.Vertex;
+import java.awt.Color;
+import java.awt.Font;
 
 public class WSocialAnalytics {	
 
@@ -76,6 +78,8 @@ public class WSocialAnalytics {
 	private Vector<MaximizationAlgorithm> maximizationAlgorithms;
 	private JLabel lblMaximizationAlgorithm;
 	private JComboBox comboMaximizationAlgorithm;
+	private JLabel lblState;
+	private JLabel lblSnstate;
 
 	/**
 	 * Launch the application.
@@ -184,12 +188,13 @@ public class WSocialAnalytics {
 		frmSocialAnalytics.getContentPane().add(panelFile, gbc_panelFile);
 		GridBagLayout gbl_panelFile = new GridBagLayout();
 		gbl_panelFile.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panelFile.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_panelFile.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
 		gbl_panelFile.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panelFile.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelFile.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelFile.setLayout(gbl_panelFile);
 		
 		lblFile = new JLabel("Ningun archivo seleccionado");
+		lblFile.setForeground(Color.DARK_GRAY);
 		GridBagConstraints gbc_lblFile = new GridBagConstraints();
 		gbc_lblFile.anchor = GridBagConstraints.EAST;
 		gbc_lblFile.gridwidth = 2;
@@ -250,10 +255,31 @@ public class WSocialAnalytics {
 		
 		btnParse = new JButton("Parsear");
 		GridBagConstraints gbc_btnParse = new GridBagConstraints();
+		gbc_btnParse.insets = new Insets(0, 0, 5, 0);
 		gbc_btnParse.gridwidth = 3;
 		gbc_btnParse.gridx = 0;
 		gbc_btnParse.gridy = 3;
 		panelFile.add(btnParse, gbc_btnParse);
+		
+		lblState = new JLabel("<html>Ningun archivo parseado</html>");
+		lblState.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblState = new GridBagConstraints();
+		gbc_lblState.insets = new Insets(0, 0, 5, 0);
+		gbc_lblState.anchor = GridBagConstraints.WEST;
+		gbc_lblState.gridwidth = 3;
+		gbc_lblState.gridx = 0;
+		gbc_lblState.gridy = 4;
+		panelFile.add(lblState, gbc_lblState);
+		
+		lblSnstate = new JLabel("<html> * Vertices: 0<br> * Aristas: 0</html>");
+		lblSnstate.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_lblSnstate = new GridBagConstraints();
+		gbc_lblSnstate.anchor = GridBagConstraints.WEST;
+		gbc_lblSnstate.gridwidth = 3;
+		gbc_lblSnstate.insets = new Insets(0, 0, 0, 5);
+		gbc_lblSnstate.gridx = 0;
+		gbc_lblSnstate.gridy = 5;
+		panelFile.add(lblSnstate, gbc_lblSnstate);
 		
 		panelPropagation = new JPanel();
 		panelPropagation.setBorder(new TitledBorder(null, "Algoritmo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -351,6 +377,7 @@ public class WSocialAnalytics {
 	private void openFile(String path) {
         file = new File(path);
         lblFile.setText(file.getAbsolutePath());
+		lblFile.setForeground(Color.BLACK);
         System.out.println("Archivo: " + file.getName());		
 	}
 	
@@ -368,7 +395,20 @@ public class WSocialAnalytics {
 		log.info("FileParser: " + fp.getClass().getName());
 		log.info("LineParser: " + lp.getClass().getName());
 		
-		fp.parseFile(file, lp, sn);
+		if (fp.parseFile(file, lp, sn)) {
+			log.info("Archivo parseado correctamente");
+			lblState.setText("Archivo parseado correctamente");
+			lblState.setForeground(new Color(50, 205, 50));
+		} else {
+			log.info("Archivo parseado con errores");	
+			lblState.setText("Archivo parseado con errores");
+			lblState.setForeground(Color.RED);	
+		}
+		
+		log.info(" * Vertices: " + sn.getVerticesCount());
+		log.info(" * Aristas: " + sn.getEdgeCount());
+		
+		lblSnstate.setText("<html> * Vertices: " + sn.getVerticesCount() + "<br> * Aristas: " + sn.getEdgeCount() + "</html>");
 	}
 
 }
