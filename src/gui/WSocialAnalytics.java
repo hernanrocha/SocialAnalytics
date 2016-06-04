@@ -447,7 +447,7 @@ public class WSocialAnalytics {
 		log.info("PropagationModel: " + propModel.getClass().getName());
 		log.info("SpreadCalculator: " + spreadCalculator.getClass().getName());
 		
-		propModel.propagate(sn, seedSet);
+		spreadCalculator.calculateSpread(sn, seedSet, propModel);
 	}
 
 	protected void openFile() {

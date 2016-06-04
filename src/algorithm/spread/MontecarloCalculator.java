@@ -4,25 +4,20 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import propagation.IndependentCascadeModel;
 import propagation.PropagationModel;
 import struct.SocialNetwork;
 import struct.Vertex;
 
 public class MontecarloCalculator extends SpreadCalculator {
 	
-	private static final int DEFAULT_RUNS = 1;
+	private static final int DEFAULT_RUNS = 5;
 	
-	static Logger log = Logger.getLogger(IndependentCascadeModel.class.getName());
+	static Logger log = Logger.getLogger(MontecarloCalculator.class.getName());
 	
-	private Integer runs;
+	private Integer runs = DEFAULT_RUNS;
 	
-	public MontecarloCalculator(Integer runs) {
+	public void setRuns(Integer runs) {
 		this.runs = runs;
-	}
-	
-	public MontecarloCalculator() {
-		this(DEFAULT_RUNS);
 	}
 
 	@Override
@@ -31,10 +26,14 @@ public class MontecarloCalculator extends SpreadCalculator {
 		
 		int total = 0;
 		for (int i = 0; i < runs; i++){
+			log.trace("Run " + (i+1) + "/" + runs);
 			total += model.propagate(sn, seedSet);
 		}
 		
-		return ((double) total) / runs;
+		double avg = ((double) total) / runs;
+		log.trace("Average: " + avg);
+		
+		return avg;
 	}
 
 }

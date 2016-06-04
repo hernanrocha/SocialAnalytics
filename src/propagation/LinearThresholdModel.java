@@ -43,7 +43,8 @@ public class LinearThresholdModel extends PropagationModel {
 			i++;
 		} while (step());
 
-		log.trace("- No se activo ningun nodo. Propagacion finalizada");
+		log.trace("No se activo ningun nodo. Propagacion finalizada");
+		log.trace("Propagacion total: " + actives.size());
 		log.trace("--------------------------------------");
 		
 		return actives.size();
