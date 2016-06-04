@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
+
 import algorithm.spread.SpreadCalculator;
 import propagation.PropagationModel;
 import struct.SocialNetwork;
@@ -13,9 +15,11 @@ import struct.Vertex;
 
 public class CelfAlgorithm extends MaximizationAlgorithm {
 	
+	static Logger log = Logger.getLogger(CelfAlgorithm.class.getName());
+	
 	@Override
 	public Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n) {
-		System.out.println("[CELF Algorithm]");
+		log.info("[CELF Algorithm]");
 		
 		if (n == 0){
 			return new HashSet<Vertex>();
@@ -34,7 +38,8 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 			Double marginal = spread.calculateSpread(sn, seedSet, model);
 			marginals.add(new CelfVertex(v, marginal));			
 		}
-		System.out.println("Elijo " + marginals.last().getVertex());
+		
+		log.info("Elijo " + marginals.last().getVertex());
 		solution.add(marginals.last().getVertex());
 		marginals.remove(marginals.last());
 		int i = 1;
@@ -49,12 +54,12 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 			
 			if (newMarginal >= marginals.last().getMarginal()) {
 				// Si sigue siendo la mejor, agregar al conjunto solution
-				System.out.println("Elijo " + last.getVertex());
+				log.info("Elijo " + last.getVertex());
 				solution.add(last.getVertex());
 				i++;
 			} else {
 				// Devolverlo a la lista con la ganancia marginal actualizada
-				System.out.println(" Actualizo " + last.getVertex());
+				log.info(" Actualizo " + last.getVertex());
 				marginals.add(new CelfVertex(last.getVertex(), newMarginal));
 			}			
 		}
