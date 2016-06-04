@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -46,6 +47,9 @@ import struct.SocialNetwork;
 import struct.Vertex;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class WSocialAnalytics {	
 
@@ -70,7 +74,7 @@ public class WSocialAnalytics {
 	private JComboBox comboPropagationModel;
 	private JLabel lblSpreadCalculator;
 	private JComboBox comboSpreadCalculator;
-	private JButton btnNewButton;
+	private JButton btnPropagate;
 	
 	// Propagacion
 	private Vector<PropagationModel> propagationModels;
@@ -80,6 +84,9 @@ public class WSocialAnalytics {
 	private JComboBox comboMaximizationAlgorithm;
 	private JLabel lblState;
 	private JLabel lblSnstate;
+	private JTextField lblSeedSet;
+	private JButton btnRandom;
+	private JSpinner spinnerRandomCount;
 
 	/**
 	 * Launch the application.
@@ -157,7 +164,17 @@ public class WSocialAnalytics {
 		
 		initialize();
 		
+		automate();
+	}
 
+	private void automate() {
+		// Load dataset
+		openFile("dataset/celf/hep_LT2.inf");
+		parseSocialNetwork();
+		
+		// Propagate
+		generateRandomSeedSet((Integer) spinnerRandomCount.getValue());
+		propagate();
 	}
 
 	/**
@@ -166,7 +183,7 @@ public class WSocialAnalytics {
 	private void initialize() {
 		frmSocialAnalytics = new JFrame();
 		frmSocialAnalytics.setTitle("Social Analytics");
-		frmSocialAnalytics.setBounds(100, 100, 450, 425);
+		frmSocialAnalytics.setBounds(100, 100, 450, 466);
 		frmSocialAnalytics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -291,9 +308,9 @@ public class WSocialAnalytics {
 		frmSocialAnalytics.getContentPane().add(panelPropagation, gbc_panelPropagation);
 		GridBagLayout gbl_panelPropagation = new GridBagLayout();
 		gbl_panelPropagation.columnWidths = new int[]{0, 0, 0};
-		gbl_panelPropagation.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_panelPropagation.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
 		gbl_panelPropagation.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_panelPropagation.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelPropagation.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelPropagation.setLayout(gbl_panelPropagation);
 		
 		lblPropagationModel = new JLabel("Propagation Model");
@@ -330,12 +347,54 @@ public class WSocialAnalytics {
 		gbc_comboSpreadCalculator.gridy = 1;
 		panelPropagation.add(comboSpreadCalculator, gbc_comboSpreadCalculator);
 		
+		lblSeedSet = new JTextField();
+		lblSeedSet.setText("2 4 6 8 10");
+		GridBagConstraints gbc_lblSeedSet = new GridBagConstraints();
+		gbc_lblSeedSet.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSeedSet.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblSeedSet.gridx = 0;
+		gbc_lblSeedSet.gridy = 2;
+		panelPropagation.add(lblSeedSet, gbc_lblSeedSet);
+		lblSeedSet.setColumns(10);
+		
+		btnPropagate = new JButton("Propagar");
+		btnPropagate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				propagate();
+			}
+		});
+		
+		spinnerRandomCount = new JSpinner();
+		spinnerRandomCount.setModel(new SpinnerNumberModel(new Integer(5), new Integer(1), null, new Integer(1)));
+		GridBagConstraints gbc_spinnerRandomCount = new GridBagConstraints();
+		gbc_spinnerRandomCount.insets = new Insets(0, 0, 5, 0);
+		gbc_spinnerRandomCount.gridx = 1;
+		gbc_spinnerRandomCount.gridy = 2;
+		panelPropagation.add(spinnerRandomCount, gbc_spinnerRandomCount);
+		GridBagConstraints gbc_btnPropagate = new GridBagConstraints();
+		gbc_btnPropagate.insets = new Insets(0, 0, 5, 5);
+		gbc_btnPropagate.gridx = 0;
+		gbc_btnPropagate.gridy = 3;
+		panelPropagation.add(btnPropagate, gbc_btnPropagate);
+		
+		btnRandom = new JButton("Random");
+		btnRandom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				generateRandomSeedSet((Integer) spinnerRandomCount.getValue());
+			}
+		});
+		GridBagConstraints gbc_btnRandom = new GridBagConstraints();
+		gbc_btnRandom.insets = new Insets(0, 0, 5, 0);
+		gbc_btnRandom.gridx = 1;
+		gbc_btnRandom.gridy = 3;
+		panelPropagation.add(btnRandom, gbc_btnRandom);
+		
 		lblMaximizationAlgorithm = new JLabel("Maximization Algorithm");
 		GridBagConstraints gbc_lblMaximizationAlgorithm = new GridBagConstraints();
 		gbc_lblMaximizationAlgorithm.anchor = GridBagConstraints.EAST;
 		gbc_lblMaximizationAlgorithm.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMaximizationAlgorithm.gridx = 0;
-		gbc_lblMaximizationAlgorithm.gridy = 2;
+		gbc_lblMaximizationAlgorithm.gridy = 4;
 		panelPropagation.add(lblMaximizationAlgorithm, gbc_lblMaximizationAlgorithm);
 		
 		comboMaximizationAlgorithm = new JComboBox();
@@ -344,20 +403,51 @@ public class WSocialAnalytics {
 		gbc_comboMaximizationAlgorithm.insets = new Insets(0, 0, 5, 0);
 		gbc_comboMaximizationAlgorithm.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboMaximizationAlgorithm.gridx = 1;
-		gbc_comboMaximizationAlgorithm.gridy = 2;
+		gbc_comboMaximizationAlgorithm.gridy = 4;
 		panelPropagation.add(comboMaximizationAlgorithm, gbc_comboMaximizationAlgorithm);
-		
-		btnNewButton = new JButton("New button");
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
-		gbc_btnNewButton.gridx = 0;
-		gbc_btnNewButton.gridy = 3;
-		panelPropagation.add(btnNewButton, gbc_btnNewButton);
 		btnParse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				parseSocialNetwork();
 			}
 		});
+	}
+
+	protected void generateRandomSeedSet(int n) {
+		Set<Vertex> vertices = sn.getVertices();
+		Vertex[] a = new Vertex[vertices.size()];
+		vertices.toArray(a);
+		Vector<Vertex> v = new Vector<Vertex>(Arrays.asList(a));
+		
+		String text = "";
+		
+		for (int i = 0; i < n; i++){
+			Integer size = v.size();
+			
+			int selected = (int) Math.floor(Math.random() * size);
+			text += selected + " ";
+			v.remove(selected);
+		}
+		
+		lblSeedSet.setText(text);
+	}
+
+	protected void propagate() {
+		// Armar un SeedSet inicial
+		Set<Vertex> seedSet = new HashSet<Vertex>();		
+		String[] txtSeedSet = lblSeedSet.getText().split(" ");
+		for (int i = 0; i < txtSeedSet.length; i++) {			
+			seedSet.add(sn.getVertex(Integer.parseInt(txtSeedSet[i])));
+		}
+		
+		// Realizar propagacion
+		PropagationModel propModel = propagationModels.elementAt(comboPropagationModel.getSelectedIndex());
+		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
+
+		log.info("SeedSet(" + seedSet.size() + "): " + seedSet);
+		log.info("PropagationModel: " + propModel.getClass().getName());
+		log.info("SpreadCalculator: " + spreadCalculator.getClass().getName());
+		
+		propModel.propagate(sn, seedSet);
 	}
 
 	protected void openFile() {

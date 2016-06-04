@@ -22,6 +22,7 @@ public class LinearThresholdModel extends PropagationModel {
 		actives = new HashSet<Vertex>();
 		inactives = new HashSet<Vertex>();
 		
+		// Inicializacion de activos e inactivos
 		for (Vertex node : sn.getVertices()){			
 			if (seedSet.contains(node)){
 				// Agregar los seeds a la lista de nodos activos
@@ -35,15 +36,15 @@ public class LinearThresholdModel extends PropagationModel {
 		// Realizar proceso de spreading
 		int i = 1;
 		do {
-			log.trace(" --------------- Step " + i + " ---------------");
-			log.trace(" - Activos: " + actives.size());
-			log.trace(" - Inactivos: " + inactives.size());
+			log.trace("--------------- Step " + i + " ---------------");
+			log.trace("- Activos: " + actives.size());
+			log.trace("- Inactivos: " + inactives.size());
 			
 			i++;
 		} while (step());
 
-		log.trace(" - No se activo ningun nodo. Propagacion finalizada");
-		log.trace(" --------------------------------------");
+		log.trace("- No se activo ningun nodo. Propagacion finalizada");
+		log.trace("--------------------------------------");
 		
 		return actives.size();
 	}
@@ -66,8 +67,8 @@ public class LinearThresholdModel extends PropagationModel {
 			
 			// Si superan el threshold del nodo, pasar a lista de nodos a activar
 			if (influence > node.getThreshold()){				
-				log.trace(influence + " > " + node.getThreshold() + ". Activo " + node);
-				newActives.add(node);			
+				log.trace("(Activar " + node + ") " + influence + " > " + node.getThreshold());
+				newActives.add(node);
 			}
 		}
 		
