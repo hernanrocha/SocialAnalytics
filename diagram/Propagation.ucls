@@ -4,16 +4,16 @@
   router="FAN">  
   <class id="1" language="java" name="propagation.LinearThresholdModel" project="SocialAnalytics" 
     file="/SocialAnalytics/src/propagation/LinearThresholdModel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="150" y="290"/>    
+    <position height="-1" width="-1" x="135" y="235"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="propagation.PropagationModel" project="SocialAnalytics" 
     file="/SocialAnalytics/src/propagation/PropagationModel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="297" y="115"/>    
+    <position height="-1" width="-1" x="285" y="63"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -22,25 +22,25 @@
   </class>  
   <class id="3" language="java" name="propagation.IndependentCascadeModel" project="SocialAnalytics" 
     file="/SocialAnalytics/src/propagation/IndependentCascadeModel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="442" y="290"/>    
+    <position height="-1" width="-1" x="393" y="235"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="4" language="java" name="algorithm.spread.MontecarloCalculator" project="SocialAnalytics" 
     file="/SocialAnalytics/src/algorithm/spread/MontecarloCalculator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="822" y="291"/>    
+    <position height="-1" width="-1" x="275" y="528"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="5" language="java" name="algorithm.spread.SpreadCalculator" project="SocialAnalytics" 
     file="/SocialAnalytics/src/algorithm/spread/SpreadCalculator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="824" y="113"/>    
+    <position height="-1" width="-1" x="274" y="379"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
