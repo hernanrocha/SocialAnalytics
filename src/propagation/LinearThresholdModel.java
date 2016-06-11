@@ -13,17 +13,18 @@ public class LinearThresholdModel extends PropagationModel {
 	
 	static Logger log = Logger.getLogger(LinearThresholdModel.class.getName());
 	
-	protected Set<Vertex> actives, inactives;
+	//protected Set<Vertex> actives, inactives;
+	protected Set<Vertex> actives, nodes;
 
 	@Override
 	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
 		log.trace("[Modelo de Propagacion Linear Threshold]");
 		
 		actives = new HashSet<Vertex>();
-		inactives = new HashSet<Vertex>();
+		//inactives = new HashSet<Vertex>();
 		
 		// Inicializacion de activos e inactivos
-		for (Vertex node : sn.getVertices()){			
+		/*for (Vertex node : sn.getVertices()){			
 			if (seedSet.contains(node)){
 				// Agregar los seeds a la lista de nodos activos
 				actives.add((Vertex) node);
@@ -31,14 +32,18 @@ public class LinearThresholdModel extends PropagationModel {
 				// Agregar el resto de los nodos a la lista de inactivos
 				inactives.add((Vertex) node);
 			}
+		}*/
+		for (Vertex v : seedSet) {
+			actives.add(v);
 		}
+		nodes = sn.getVertices();
 		
 		// Realizar proceso de spreading
 		int i = 1;
 		do {
 			log.trace("--------------- Step " + i + " ---------------");
 			log.trace("- Activos: " + actives.size());
-			log.trace("- Inactivos: " + inactives.size());
+			//log.trace("- Inactivos: " + inactives.size());
 			
 			i++;
 		} while (step());
@@ -55,27 +60,30 @@ public class LinearThresholdModel extends PropagationModel {
 		Set<Vertex> newActives = new HashSet<Vertex>();
 		
 		// Buscar nuevos nodos para activar
-		for (Vertex node : inactives){
-			Set<Edge> neighbors = node.getInNeighbors();
-			Double influence = 0.0;
-
-			// Sumar la influencia de los nodos vecinos ya activos
-			for (Edge edge : neighbors){
-				if (actives.contains(edge.getA())){
-					influence += edge.getWeight();
+		
+		for (Vertex node : nodes){
+			if (!actives.contains(node)) {
+				Set<Edge> neighbors = node.getInNeighbors();
+				Double influence = 0.0;
+	
+				// Sumar la influencia de los nodos vecinos ya activos
+				for (Edge edge : neighbors){
+					if (actives.contains(edge.getA())){
+						influence += edge.getWeight();
+					}
 				}
-			}
-			
-			// Si superan el threshold del nodo, pasar a lista de nodos a activar
-			if (influence > node.getThreshold()){				
-				log.trace("(Activar " + node + ") " + influence + " > " + node.getThreshold());
-				newActives.add(node);
+				
+				// Si superan el threshold del nodo, pasar a lista de nodos a activar
+				if (influence > node.getThreshold()){				
+					log.trace("(Activar " + node + ") " + influence + " > " + node.getThreshold());
+					newActives.add(node);
+				}
 			}
 		}
 		
 		// Pasar de inactivos a activos
 		for (Vertex node : newActives){
-			inactives.remove(node);
+			//inactives.remove(node);
 			actives.add(node);
 		}
 		
