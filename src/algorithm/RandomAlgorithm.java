@@ -33,6 +33,7 @@ public class RandomAlgorithm extends MaximizationAlgorithm {
 			
 			int selected = (int) Math.floor(Math.random() * size);
 			log.info("Seleccionar " + v.get(selected));
+			publish((i+1) * 100 / n);
 			
 			solution.add(v.get(selected));
 			v.remove(selected);

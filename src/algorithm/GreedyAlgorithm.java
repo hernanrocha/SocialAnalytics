@@ -16,7 +16,7 @@ public class GreedyAlgorithm extends MaximizationAlgorithm {
 	
 	@Override
 	public Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n) {
-		log.info("[Greedy Algorithm]");
+		log.warn("[Greedy Algorithm]");
 
 		Set<Vertex> solution = new HashSet<Vertex>();
 		Set<Vertex> vertices = sn.getVertices();
@@ -25,9 +25,11 @@ public class GreedyAlgorithm extends MaximizationAlgorithm {
 			Double bestMarginal = 0.0;
 			Vertex bestVertex = null;
 
+			int j = 1;
 			for (Vertex vertex : vertices) {
-
-				log.info("Verice " + vertex);
+				int a = j * 100;
+				int b = vertices.size() * n;
+				updateProgress(a / b);
 				
 				// Algoritmo de calculo de spread para calcular marginal
 				Double newMarginal = getMarginal(sn, spread, model, solution, vertex);
@@ -36,12 +38,14 @@ public class GreedyAlgorithm extends MaximizationAlgorithm {
 					bestMarginal = newMarginal;
 					bestVertex = vertex;
 				}
+				
+				j++;
 			}
 			
 			solution.add(bestVertex);
 			vertices.remove(bestVertex);
 			
-			log.info("Seleccionar " + bestVertex + " (marginal " + bestMarginal + ")");
+			log.warn("Seleccionar " + bestVertex + " (marginal " + bestMarginal + ")");
 		}
 		
 		return solution;
