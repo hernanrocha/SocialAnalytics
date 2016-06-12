@@ -2,7 +2,7 @@ package algorithm;
 
 import struct.Vertex;
 
-public class CelfVertex {
+public class CelfVertex implements Comparable<CelfVertex> {
 	Vertex vertex;
 	Double marginal;
 
@@ -17,6 +17,18 @@ public class CelfVertex {
 
 	public Double getMarginal() {
 		return marginal;
+	}
+
+	@Override
+	public int compareTo(CelfVertex other) {
+		
+		int comp = marginal.compareTo(other.getMarginal());
+		
+		if (comp == 0) {
+			return vertex.getID().compareTo(other.getVertex().getID());
+		}
+		
+		return comp;
 	}
 
 }

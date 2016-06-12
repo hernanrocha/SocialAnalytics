@@ -472,7 +472,7 @@ public class WSocialAnalytics {
 	}
 
 	protected void maximize() {		
-		Integer n = 1;
+		Integer n = 15;
 		PropagationModel propModel = propagationModels.elementAt(comboPropagationModel.getSelectedIndex());
 		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
 		MaximizationAlgorithm algorithm = maximizationAlgorithms.elementAt(comboMaximizationAlgorithm.getSelectedIndex());
@@ -540,7 +540,7 @@ public class WSocialAnalytics {
 
 		long end = System.currentTimeMillis();
 		long tiempoProcesamiento = end - begin;
-		log.info("Spread calculado: " + spread + "(" + tiempoProcesamiento + "ms)");
+		log.warn("Spread calculado: " + spread + "(" + tiempoProcesamiento + "ms)");
 	}
 
 	protected void openFile() {
