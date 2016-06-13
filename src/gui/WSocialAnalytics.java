@@ -183,7 +183,28 @@ public class WSocialAnalytics {
 		// Propagate
 		//generateRandomSeedSet((Integer) spinnerRandomCount.getValue());
 		//propagate();
+
+		generateGraph();
+		
+		
 	}
+	
+	public void generateGraph(){
+		GraphViz gv = new GraphViz();
+		gv.addln(gv.start_graph());
+		gv.addln("A -> B;");
+		gv.addln("A -> C;");
+		gv.addln(gv.end_graph());
+		System.out.println(gv.getDotSource());
+		//gv.add(capturas.elementAt(capturaActual));
+		
+		GraphViz.verificarDirectorio(GraphViz.TEMP_DIR);
+		String nombre = GraphViz.TEMP_DIR + "/grafico." + GraphViz.IMAGE_EXT;
+	    File out = new File(nombre);
+	  	gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), GraphViz.IMAGE_EXT ), out );
+	  	
+	  	
+	}	
 
 	/**
 	 * Initialize the contents of the frame.
@@ -564,7 +585,6 @@ public class WSocialAnalytics {
         file = new File(path);
         lblFile.setText(file.getAbsolutePath());
 		lblFile.setForeground(Color.BLACK);
-        System.out.println("Archivo: " + file.getName());		
 	}
 	
 	protected void parseSocialNetwork() {
