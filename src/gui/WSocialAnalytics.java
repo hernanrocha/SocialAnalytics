@@ -356,6 +356,7 @@ public class WSocialAnalytics {
 		panelPropagation.add(comboSpreadCalculator, gbc_comboSpreadCalculator);
 		
 		btnPropagate = new JButton("Propagar");
+		btnPropagate.setEnabled(false);
 		btnPropagate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				propagate();
@@ -397,6 +398,7 @@ public class WSocialAnalytics {
 		spinnerRandomCount.setModel(new SpinnerNumberModel(new Integer(5), new Integer(1), null, new Integer(1)));
 		
 		btnRandom = new JButton("Generar Aleatorio");
+		btnRandom.setEnabled(false);
 		GridBagConstraints gbc_btnRandom = new GridBagConstraints();
 		gbc_btnRandom.anchor = GridBagConstraints.WEST;
 		gbc_btnRandom.gridx = 2;
@@ -445,6 +447,7 @@ public class WSocialAnalytics {
 		comboMaximizationAlgorithm.setModel(new DefaultComboBoxModel<String>(new String[] {"Random", "Greedy", "CELF", "CELF ++"}));
 		
 		btnMaximize = new JButton("Maximize");
+		btnMaximize.setEnabled(false);
 		btnMaximize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				maximize();
@@ -582,10 +585,18 @@ public class WSocialAnalytics {
 			log.info("Archivo parseado correctamente");
 			lblState.setText("Archivo parseado correctamente");
 			lblState.setForeground(new Color(50, 205, 50));
+
+			btnRandom.setEnabled(true);
+			btnPropagate.setEnabled(true);
+			btnMaximize.setEnabled(true);
 		} else {
 			log.info("Archivo parseado con errores");	
 			lblState.setText("Archivo parseado con errores");
-			lblState.setForeground(Color.RED);	
+			lblState.setForeground(Color.RED);
+			
+			btnRandom.setEnabled(false);
+			btnPropagate.setEnabled(false);
+			btnMaximize.setEnabled(false);
 		}
 		
 		log.info(" * Vertices: " + sn.getVerticesCount());
