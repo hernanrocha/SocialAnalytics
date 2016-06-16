@@ -27,6 +27,7 @@ public class IndependentCascadeModel extends PropagationModel {
 		
 		actives = new HashSet<Vertex>();
 		target = new Stack<Vertex>();
+		this.drawGraph = drawGraph;
 		
 		// Agregar a lista de targets las semillas iniciales
 		for (Vertex node : sn.getVertices()){			
@@ -35,7 +36,7 @@ public class IndependentCascadeModel extends PropagationModel {
 				target.add(node);
 				
 				if (drawGraph) {
-					GraphViz.getInstance().addln(node.getID().toString());				
+					GraphViz.getInstance().addln(node.getID().toString() + "[color=green]");				
 				}
 			}
 		}
@@ -54,6 +55,10 @@ public class IndependentCascadeModel extends PropagationModel {
 		log.trace("No quedan mas nodos a activar. Propagacion finalizada");
 		log.trace("Propagacion total: " + actives.size());
 		log.trace("--------------------------------------");
+		
+		if (drawGraph) {
+			GraphViz.getInstance().addln("label = \"Independent Cascade Model \\n Propagacion: " + actives.size());			
+		}
 		
 		return actives.size();
 	}
@@ -82,9 +87,8 @@ public class IndependentCascadeModel extends PropagationModel {
 					NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 					DecimalFormat df = (DecimalFormat) nf;
 					df.applyPattern("#.##");
-					String weight = df.format(edge.getWeight());
 					GraphViz.getInstance().addln(edge.getA().getID().toString() + " -> " + edge.getB().getID().toString() +
-							"[ label = " + weight + " ]");
+							"[label = \"" + df.format(random) + "\\n(" + df.format(edge.getWeight()) + ")\"]");
 				}
 			}
 		}

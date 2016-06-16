@@ -32,7 +32,12 @@ public class LinearThresholdModel extends PropagationModel {
 			actives.add(v);
 			
 			if (drawGraph) {
-				GraphViz.getInstance().addln(v.getID().toString());				
+
+				NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+				DecimalFormat df = (DecimalFormat) nf;
+				df.applyPattern("#.##");
+				
+				GraphViz.getInstance().addln(v.getID().toString() + "[label=" + v.getID() + " color=green]");				
 			}
 		}
 		nodes = sn.getVertices();
@@ -49,6 +54,10 @@ public class LinearThresholdModel extends PropagationModel {
 		log.trace("No se activo ningun nodo. Propagacion finalizada");
 		log.trace("Propagacion total: " + actives.size());
 		log.trace("--------------------------------------");
+		
+		if (drawGraph) {
+			GraphViz.getInstance().addln("label = \"Linear Threshold Model \\n Propagacion: " + actives.size());		
+		}
 		
 		return actives.size();
 	}
@@ -82,6 +91,8 @@ public class LinearThresholdModel extends PropagationModel {
 								DecimalFormat df = (DecimalFormat) nf;
 								df.applyPattern("#.##");
 								String weight = df.format(edge.getWeight());
+
+								GraphViz.getInstance().addln(node.getID().toString() + "[label=\"" + node.getID() + "\\n(" + df.format(node.getThreshold()) + ")\"]");	
 								GraphViz.getInstance().addln(edge.getA().getID().toString() + " -> " + edge.getB().getID().toString() +
 										"[ label = " + weight + " ]");
 							}
