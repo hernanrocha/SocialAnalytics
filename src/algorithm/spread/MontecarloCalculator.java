@@ -21,13 +21,13 @@ public class MontecarloCalculator extends SpreadCalculator {
 	}
 
 	@Override
-	public Double calculateSpread(SocialNetwork sn, Set<Vertex> seedSet, PropagationModel model, boolean drawGraph) {
+	public Double calculateSpread(SocialNetwork sn, Set<Vertex> seedSet, PropagationModel model) {
 		log.trace("[Montecarlo Calculator]");
 		
 		int total = 0;
 		for (int i = 0; i < runs; i++){
 			log.trace("Run " + (i+1) + "/" + runs);
-			total += model.propagate(sn, seedSet, drawGraph);
+			total += model.propagate(sn, seedSet);
 		}
 		
 		double avg = ((double) total) / runs;

@@ -89,7 +89,7 @@ public class WSocialAnalytics {
 	private JLabel lblState;
 	private JLabel lblSnstate;
 	private JTextField lblSeedSet;
-	private JSpinner spinnerRandomCount;
+	private JSpinner spinnerSeedSize;
 	private JPanel panel;
 	private JPanel panelMaximizacion;
 	private JButton btnMaximize;
@@ -182,19 +182,9 @@ public class WSocialAnalytics {
 		openFile("dataset/celf/hep_LT2.inf");
 		parseSocialNetwork();
 		
-		// Propagate
-		//generateRandomSeedSet((Integer) spinnerRandomCount.getValue());
-		//propagate();
-
-		generateGraph();
-		
-		
+		// Maximize
+		maximize();		
 	}
-	
-	public void generateGraph(){
-		
-	  	
-	}	
 
 	/**
 	 * Initialize the contents of the frame.
@@ -413,14 +403,14 @@ public class WSocialAnalytics {
 		gbc_labelSeedSize.gridy = 0;
 		panelMaximizacion.add(labelSeedSize, gbc_labelSeedSize);
 		
-		spinnerRandomCount = new JSpinner();
-		GridBagConstraints gbc_spinnerRandomCount = new GridBagConstraints();
-		gbc_spinnerRandomCount.anchor = GridBagConstraints.WEST;
-		gbc_spinnerRandomCount.insets = new Insets(0, 0, 5, 5);
-		gbc_spinnerRandomCount.gridx = 1;
-		gbc_spinnerRandomCount.gridy = 0;
-		panelMaximizacion.add(spinnerRandomCount, gbc_spinnerRandomCount);
-		spinnerRandomCount.setModel(new SpinnerNumberModel(new Integer(5), new Integer(1), null, new Integer(1)));
+		spinnerSeedSize = new JSpinner();
+		GridBagConstraints gbc_spinnerSeedSize = new GridBagConstraints();
+		gbc_spinnerSeedSize.anchor = GridBagConstraints.WEST;
+		gbc_spinnerSeedSize.insets = new Insets(0, 0, 5, 5);
+		gbc_spinnerSeedSize.gridx = 1;
+		gbc_spinnerSeedSize.gridy = 0;
+		panelMaximizacion.add(spinnerSeedSize, gbc_spinnerSeedSize);
+		spinnerSeedSize.setModel(new SpinnerNumberModel(new Integer(5), new Integer(1), null, new Integer(1)));
 		
 		lblAlgorithm = new JLabel("Algorithm");
 		GridBagConstraints gbc_lblAlgorithm = new GridBagConstraints();
@@ -475,7 +465,6 @@ public class WSocialAnalytics {
 		gbc_lblSeedSet.gridx = 0;
 		gbc_lblSeedSet.gridy = 0;
 		panel.add(lblSeedSet, gbc_lblSeedSet);
-		lblSeedSet.setText("2 4 6 8 10");
 		lblSeedSet.setColumns(10);
 		
 		btnPropagate = new JButton("Propagar");
@@ -497,7 +486,7 @@ public class WSocialAnalytics {
 	}
 
 	protected void maximize() {		
-		Integer n = 15;
+		Integer n = (Integer) spinnerSeedSize.getValue();
 		PropagationModel propModel = propagationModels.elementAt(comboPropagationModel.getSelectedIndex());
 		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
 		MontecarloCalculator montecarlo = (MontecarloCalculator) spreadCalculator;
@@ -516,34 +505,23 @@ public class WSocialAnalytics {
 		algorithm.setProgressBar(progressGreedy);
 		
 		algorithm.execute();
-		/*try {
+		try {
 			Set<Vertex> optimalSeedSet = algorithm.get();
+			log.info("Optimal Seed Set: " + optimalSeedSet);
+			
+			// Mostrar el resultado
+			String str = "";
+			for (Vertex v : optimalSeedSet){
+				str += v.toString() + " ";
+			}
+			lblSeedSet.setText(str);
+			propagate();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-		}*/
-		//log.info("Optimal Seed Set: " + optimalSeedSet);
-	}
-
-	/*protected void generateRandomSeedSet(int n) {
-		Set<Vertex> vertices = sn.getVertices();
-		Vertex[] a = new Vertex[vertices.size()];
-		vertices.toArray(a);
-		Vector<Vertex> v = new Vector<Vertex>(Arrays.asList(a));
-		
-		String text = "";
-		
-		for (int i = 0; i < n; i++){
-			Integer size = v.size();
-			
-			int selected = (int) Math.floor(Math.random() * size);
-			text += selected + " ";
-			v.remove(selected);
 		}
-		
-		lblSeedSet.setText(text);
-	}*/
+	}
 
 	protected void propagate() {
 		// Armar un SeedSet inicial
@@ -555,12 +533,9 @@ public class WSocialAnalytics {
 		
 		// Realizar propagacion
 		PropagationModel propModel = propagationModels.elementAt(comboPropagationModel.getSelectedIndex());
-		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
 
 		log.info("SeedSet(" + seedSet.size() + "): " + seedSet);
-		log.info("PropagationModel: " + propModel.getClass().getName());
-		log.info("SpreadCalculator: " + spreadCalculator.getClass().getName());
-		
+		log.info("PropagationModel: " + propModel.getClass().getName());		
 
 		long begin = System.currentTimeMillis();
 		
@@ -568,7 +543,7 @@ public class WSocialAnalytics {
 		gv.reset_graph();
 		gv.addln(gv.start_graph());		
 		
-		Double spread = spreadCalculator.calculateSpread(sn, seedSet, propModel, true);		
+		Integer spread = propModel.propagate(sn, seedSet, true);
 
 		gv.addln(gv.end_graph());
 		
