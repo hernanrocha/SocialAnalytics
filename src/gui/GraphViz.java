@@ -67,11 +67,17 @@ public class GraphViz
 	 */
 	private StringBuilder graph = new StringBuilder();
 
+	private static GraphViz instance = new GraphViz();
+	
+	public static GraphViz getInstance() {
+		return instance;
+	}
+	
 	/**
 	 * Constructor: creates a new GraphViz object that will contain
 	 * a common.graph.
 	 */
-	public GraphViz() {
+	private GraphViz() {
 	}
 
 	/**
@@ -240,7 +246,7 @@ public class GraphViz
 	 * @return A string to open a graph.
 	 */
 	public String start_graph() {
-		return "digraph G {";
+		return "digraph G { \n node [color=lightblue2, style=filled]";
 	}
 
 	/**
@@ -288,6 +294,10 @@ public class GraphViz
 		}
 		
 		return image;
+	}
+
+	public void reset_graph() {
+		graph = new StringBuilder();		
 	}
 
 }

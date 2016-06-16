@@ -1,10 +1,14 @@
 package propagation;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import gui.GraphViz;
 import struct.Edge;
 import struct.SocialNetwork;
 import struct.Vertex;
@@ -17,24 +21,19 @@ public class LinearThresholdModel extends PropagationModel {
 	protected Set<Vertex> actives, nodes;
 
 	@Override
-	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
+	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet, boolean drawGraph) {
 		log.trace("[Modelo de Propagacion Linear Threshold]");
 		
-		actives = new HashSet<Vertex>();
-		//inactives = new HashSet<Vertex>();
+		this.drawGraph = drawGraph;
 		
-		// Inicializacion de activos e inactivos
-		/*for (Vertex node : sn.getVertices()){			
-			if (seedSet.contains(node)){
-				// Agregar los seeds a la lista de nodos activos
-				actives.add((Vertex) node);
-			} else {
-				// Agregar el resto de los nodos a la lista de inactivos
-				inactives.add((Vertex) node);
-			}
-		}*/
+		actives = new HashSet<Vertex>();
+
 		for (Vertex v : seedSet) {
 			actives.add(v);
+			
+			if (drawGraph) {
+				GraphViz.getInstance().addln(v.getID().toString());				
+			}
 		}
 		nodes = sn.getVertices();
 		
@@ -43,7 +42,6 @@ public class LinearThresholdModel extends PropagationModel {
 		do {
 			log.trace("--------------- Step " + i + " ---------------");
 			log.trace("- Activos: " + actives.size());
-			//log.trace("- Inactivos: " + inactives.size());
 			
 			i++;
 		} while (step());
@@ -76,6 +74,20 @@ public class LinearThresholdModel extends PropagationModel {
 				// Si superan el threshold del nodo, pasar a lista de nodos a activar
 				if (influence > node.getThreshold()){				
 					log.trace("(Activar " + node + ") " + influence + " > " + node.getThreshold());
+					
+					if (drawGraph) {
+						for (Edge edge : neighbors){
+							if (actives.contains(edge.getA())){
+								NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+								DecimalFormat df = (DecimalFormat) nf;
+								df.applyPattern("#.##");
+								String weight = df.format(edge.getWeight());
+								GraphViz.getInstance().addln(edge.getA().getID().toString() + " -> " + edge.getB().getID().toString() +
+										"[ label = " + weight + " ]");
+							}
+						}
+					}
+					
 					newActives.add(node);
 				}
 			}

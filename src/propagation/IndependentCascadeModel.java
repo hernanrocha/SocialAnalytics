@@ -1,11 +1,15 @@
 package propagation;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
+import gui.GraphViz;
 import struct.Edge;
 import struct.Vertex;
 import struct.SocialNetwork;
@@ -18,7 +22,7 @@ public class IndependentCascadeModel extends PropagationModel {
 	protected Stack<Vertex> target;
 	
 	@Override
-	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet) {
+	public Integer propagate(SocialNetwork sn, Set<Vertex> seedSet, boolean drawGraph) {
 		log.trace("[Modelo de Propagacion Independent Cascade]");
 		
 		actives = new HashSet<Vertex>();
@@ -29,6 +33,10 @@ public class IndependentCascadeModel extends PropagationModel {
 			if (seedSet.contains(node)){
 				log.trace("Seed: " + node);
 				target.add(node);
+				
+				if (drawGraph) {
+					GraphViz.getInstance().addln(node.getID().toString());				
+				}
 			}
 		}
 		
@@ -69,6 +77,15 @@ public class IndependentCascadeModel extends PropagationModel {
 			if ( !actives.contains(neighbor) && !target.contains(neighbor) && random <= edge.getWeight() ){
 				log.trace(" - Agregar a Target " + neighbor + "(" + random + " <= " + edge.getWeight() + ")");
 				target.push(neighbor);
+				
+				if (drawGraph) {
+					NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+					DecimalFormat df = (DecimalFormat) nf;
+					df.applyPattern("#.##");
+					String weight = df.format(edge.getWeight());
+					GraphViz.getInstance().addln(edge.getA().getID().toString() + " -> " + edge.getB().getID().toString() +
+							"[ label = " + weight + " ]");
+				}
 			}
 		}
 		

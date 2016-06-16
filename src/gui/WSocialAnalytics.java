@@ -181,8 +181,8 @@ public class WSocialAnalytics {
 		parseSocialNetwork();
 		
 		// Propagate
-		//generateRandomSeedSet((Integer) spinnerRandomCount.getValue());
-		//propagate();
+		generateRandomSeedSet((Integer) spinnerRandomCount.getValue());
+		propagate();
 
 		generateGraph();
 		
@@ -190,19 +190,7 @@ public class WSocialAnalytics {
 	}
 	
 	public void generateGraph(){
-		GraphViz gv = new GraphViz();
-		gv.addln(gv.start_graph());
-		gv.addln("A -> B;");
-		gv.addln("A -> C;");
-		gv.addln(gv.end_graph());
-		System.out.println(gv.getDotSource());
-		//gv.add(capturas.elementAt(capturaActual));
 		
-		GraphViz.verificarDirectorio(GraphViz.TEMP_DIR);
-		String nombre = GraphViz.TEMP_DIR + "/grafico." + GraphViz.IMAGE_EXT;
-	    File out = new File(nombre);
-	  	gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), GraphViz.IMAGE_EXT ), out );
-	  	
 	  	
 	}	
 
@@ -560,7 +548,18 @@ public class WSocialAnalytics {
 
 		long begin = System.currentTimeMillis();
 		
-		Double spread = spreadCalculator.calculateSpread(sn, seedSet, propModel);
+		GraphViz gv = GraphViz.getInstance();
+		gv.reset_graph();
+		gv.addln(gv.start_graph());		
+		
+		Double spread = spreadCalculator.calculateSpread(sn, seedSet, propModel, true);		
+
+		gv.addln(gv.end_graph());
+		
+		GraphViz.verificarDirectorio(GraphViz.TEMP_DIR);
+		String nombre = GraphViz.TEMP_DIR + "/grafico." + GraphViz.IMAGE_EXT;
+	    File out = new File(nombre);
+	  	gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), GraphViz.IMAGE_EXT ), out );	  	
 
 		long end = System.currentTimeMillis();
 		long tiempoProcesamiento = end - begin;
