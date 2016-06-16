@@ -95,6 +95,8 @@ public class WSocialAnalytics {
 	private JPanel panelMaximizacion;
 	private JButton btnMaximize;
 	private JProgressBar progressGreedy;
+	private JSpinner spinnerRuns;
+	private JLabel lblRuns;
 
 	/**
 	 * Launch the application.
@@ -325,9 +327,9 @@ public class WSocialAnalytics {
 		frmSocialAnalytics.getContentPane().add(panelPropagation, gbc_panelPropagation);
 		GridBagLayout gbl_panelPropagation = new GridBagLayout();
 		gbl_panelPropagation.columnWidths = new int[]{0, 0, 0};
-		gbl_panelPropagation.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_panelPropagation.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
 		gbl_panelPropagation.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_panelPropagation.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelPropagation.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelPropagation.setLayout(gbl_panelPropagation);
 		
 		lblPropagationModel = new JLabel("Propagation Model");
@@ -372,6 +374,23 @@ public class WSocialAnalytics {
 			}
 		});
 		
+		lblRuns = new JLabel("Runs");
+		GridBagConstraints gbc_lblRuns = new GridBagConstraints();
+		gbc_lblRuns.anchor = GridBagConstraints.EAST;
+		gbc_lblRuns.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRuns.gridx = 0;
+		gbc_lblRuns.gridy = 2;
+		panelPropagation.add(lblRuns, gbc_lblRuns);
+		
+		spinnerRuns = new JSpinner();
+		spinnerRuns.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		GridBagConstraints gbc_spinnerRuns = new GridBagConstraints();
+		gbc_spinnerRuns.anchor = GridBagConstraints.WEST;
+		gbc_spinnerRuns.insets = new Insets(0, 0, 5, 0);
+		gbc_spinnerRuns.gridx = 1;
+		gbc_spinnerRuns.gridy = 2;
+		panelPropagation.add(spinnerRuns, gbc_spinnerRuns);
+		
 		panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Seed Set", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -379,7 +398,7 @@ public class WSocialAnalytics {
 		gbc_panel.gridwidth = 2;
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 2;
+		gbc_panel.gridy = 3;
 		panelPropagation.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0, 0, 0};
@@ -421,7 +440,7 @@ public class WSocialAnalytics {
 		GridBagConstraints gbc_btnPropagate = new GridBagConstraints();
 		gbc_btnPropagate.gridwidth = 2;
 		gbc_btnPropagate.gridx = 0;
-		gbc_btnPropagate.gridy = 3;
+		gbc_btnPropagate.gridy = 4;
 		panelPropagation.add(btnPropagate, gbc_btnPropagate);
 		
 		panelMaximizacion = new JPanel();
@@ -487,11 +506,14 @@ public class WSocialAnalytics {
 		Integer n = 15;
 		PropagationModel propModel = propagationModels.elementAt(comboPropagationModel.getSelectedIndex());
 		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
+		MontecarloCalculator montecarlo = (MontecarloCalculator) spreadCalculator;
+		montecarlo.setRuns((Integer) spinnerRuns.getValue());
 		MaximizationAlgorithm algorithm = maximizationAlgorithms.elementAt(comboMaximizationAlgorithm.getSelectedIndex());
 
 		log.info("PropagationModel: " + propModel.getClass().getName());
 		log.info("SpreadCalculator: " + spreadCalculator.getClass().getName());
 		log.info("Maximization Algorithm: " + algorithm.getClass().getName());
+		log.info("Runs: " + spinnerRuns.getValue());
 		
 		algorithm.setSn(sn);
 		algorithm.setSpread(spreadCalculator);
