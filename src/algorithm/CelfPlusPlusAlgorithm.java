@@ -18,4 +18,9 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 		return null;
 	}
 
+	@Override
+	public MaximizationAlgorithm instance() {
+		return new CelfPlusPlusAlgorithm();
+	}
+
 }

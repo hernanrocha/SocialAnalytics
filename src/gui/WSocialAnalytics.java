@@ -492,7 +492,7 @@ public class WSocialAnalytics {
 		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
 		MontecarloCalculator montecarlo = (MontecarloCalculator) spreadCalculator;
 		montecarlo.setRuns((Integer) spinnerRuns.getValue());
-		MaximizationAlgorithm algorithm = maximizationAlgorithms.elementAt(comboMaximizationAlgorithm.getSelectedIndex());
+		MaximizationAlgorithm algorithm = maximizationAlgorithms.elementAt(comboMaximizationAlgorithm.getSelectedIndex()).instance();
 
 		log.info("PropagationModel: " + propModel.getClass().getName());
 		log.info("SpreadCalculator: " + spreadCalculator.getClass().getName());

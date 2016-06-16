@@ -44,4 +44,9 @@ public class RandomAlgorithm extends MaximizationAlgorithm {
 		return solution;
 	}
 
+	@Override
+	public MaximizationAlgorithm instance() {
+		return new RandomAlgorithm();
+	}
+
 }

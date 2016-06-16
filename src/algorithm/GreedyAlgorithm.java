@@ -53,4 +53,9 @@ public class GreedyAlgorithm extends MaximizationAlgorithm {
 		return solution;
 	}
 
+	@Override
+	public MaximizationAlgorithm instance() {
+		return new GreedyAlgorithm();
+	}
+
 }

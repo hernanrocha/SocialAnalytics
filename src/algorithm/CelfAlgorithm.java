@@ -81,4 +81,9 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 		return solution;
 	}
 
+	@Override
+	public MaximizationAlgorithm instance() {
+		return new CelfAlgorithm();
+	}
+
 }

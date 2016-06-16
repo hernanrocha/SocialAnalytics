@@ -81,5 +81,7 @@ public abstract class MaximizationAlgorithm extends SwingWorker<Set<Vertex>, Int
 		
 		return posSpread - preSpread;
 	}
+
+	public abstract MaximizationAlgorithm instance();
 	
 }
