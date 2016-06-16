@@ -11,6 +11,9 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 
 	@Override
 	public Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n) {
+
+		updateProgress(0);
+		
 		// TODO Auto-generated method stub
 		return null;
 	}

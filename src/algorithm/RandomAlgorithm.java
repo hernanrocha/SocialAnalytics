@@ -27,13 +27,15 @@ public class RandomAlgorithm extends MaximizationAlgorithm {
 		
 		log.info("Elegir " + n + " entre " + a.length);
 		Set<Vertex> solution = new HashSet<Vertex>();
+
+		updateProgress(0);
 		
 		for (int i = 0; i < n; i++){
 			Integer size = v.size();
 			
 			int selected = (int) Math.floor(Math.random() * size);
 			log.info("Seleccionar " + v.get(selected));
-			publish((i+1) * 100 / n);
+			updateProgress((i+1) * 100 / n);
 			
 			solution.add(v.get(selected));
 			v.remove(selected);

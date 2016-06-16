@@ -21,6 +21,8 @@ public class GreedyAlgorithm extends MaximizationAlgorithm {
 		Set<Vertex> solution = new HashSet<Vertex>();
 		Set<Vertex> vertices = sn.getVertices();
 		
+		updateProgress(0);
+		
 		for (int i = 0; i < n; i++){
 			Double bestMarginal = 0.0;
 			Vertex bestVertex = null;

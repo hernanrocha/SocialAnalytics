@@ -20,13 +20,11 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 	public Set<Vertex> maximize(SocialNetwork sn, SpreadCalculator spread, PropagationModel model, Integer n) {
 		log.info("[CELF Algorithm]");
 		
-		if (n == 0){
-			return new HashSet<Vertex>();
-		}
-		
 		Set<Vertex> vertices = sn.getVertices();
 		SortedSet<CelfVertex> marginals = new TreeSet<CelfVertex>();
 		Set<Vertex> solution = new HashSet<Vertex>();
+
+		updateProgress(0);
 		
 		// Calcular marginales iniciales
 		int j = 1;

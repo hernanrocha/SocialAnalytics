@@ -52,13 +52,13 @@ public abstract class MaximizationAlgorithm extends SwingWorker<Set<Vertex>, Int
 		return maximize(sn, spread, model, n);
 	}
 	
-	protected void process(List<Integer> chunks){
-		int n = chunks.get(0);
-		
-		log.info("Value: " + n);
-		
-		progressBar.setValue(n);
-		progressBar.updateUI();
+	protected void process(List<Integer> chunks){		
+		for (int n : chunks) {
+			log.info("Value: " + n);
+			
+			progressBar.setValue(n);
+			progressBar.updateUI();
+		}
 	}
 	
 	protected void updateProgress(int newProgress) {		
