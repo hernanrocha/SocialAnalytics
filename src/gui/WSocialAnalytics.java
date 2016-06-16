@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -60,7 +62,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 
-public class WSocialAnalytics {	
+public class WSocialAnalytics implements PropertyChangeListener {	
 
 	static Logger log = Logger.getLogger(WSocialAnalytics.class.getName());
 
@@ -504,24 +506,8 @@ public class WSocialAnalytics {
 		algorithm.setModel(propModel);
 		algorithm.setN(n);
 		algorithm.setProgressBar(progressGreedy);
-		
-		algorithm.execute();
-		try {
-			Set<Vertex> optimalSeedSet = algorithm.get();
-			log.info("Optimal Seed Set: " + optimalSeedSet);
-			
-			// Mostrar el resultado
-			String str = "";
-			for (Vertex v : optimalSeedSet){
-				str += v.toString() + " ";
-			}
-			lblSeedSet.setText(str);
-			propagate();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+		algorithm.addPropertyChangeListener(this);		
+		algorithm.execute();		
 	}
 
 	protected void propagate() {
@@ -614,6 +600,29 @@ public class WSocialAnalytics {
 		log.info(" * Aristas: " + sn.getEdgeCount());
 		
 		lblSnstate.setText("<html> * Vertices: " + sn.getVerticesCount() + "<br> * Aristas: " + sn.getEdgeCount() + "</html>");
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		if (arg0.getPropertyName().toString().equals("state") && arg0.getNewValue().toString().equals("DONE")) {
+			try {
+				Set<Vertex> optimalSeedSet = ((MaximizationAlgorithm) arg0.getSource()).get();
+				
+				log.info("Optimal Seed Set: " + optimalSeedSet);
+				
+				// Mostrar el resultado
+				String str = "";
+				for (Vertex v : optimalSeedSet){
+					str += v.toString() + " ";
+				}
+				lblSeedSet.setText(str);
+				propagate();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
