@@ -14,6 +14,7 @@ import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -54,6 +55,10 @@ import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
 
 public class WSocialAnalytics {	
 
@@ -97,6 +102,8 @@ public class WSocialAnalytics {
 	private JSpinner spinnerRuns;
 	private JLabel lblRuns;
 	private JLabel labelSeedSize;
+	private JLabel lblImage;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -105,33 +112,6 @@ public class WSocialAnalytics {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {					
-					SocialNetwork sn = new SocialNetwork();
-					File file = new File("dataset/celf/hep_WC.inf");
-					FileParser fileParser = new SimpleFileParser();
-					LineParser lineParser = new SimpleLineParser();
-					
-					fileParser.parseFile(file, lineParser, sn);
-					
-					// Armar un SeedSet inicial
-					Set<Vertex> seedSet = new HashSet<Vertex>();					
-					seedSet.add(sn.getVertex(172));
-					seedSet.add(sn.getVertex(223));
-					seedSet.add(sn.getVertex(213));
-					seedSet.add(sn.getVertex(230));
-					
-					// Realizar propagacion
-					//PropagationModel propModel = new LinearThresholdModel();
-					PropagationModel propModel = new IndependentCascadeModel();
-					//propModel.propagate(sn, seedSet);
-					
-					SpreadCalculator spread = new MontecarloCalculator();
-					//System.out.println("SPREAD: " + spread.calculateSpread(sn, seedSet, propModel));
-
-					MaximizationAlgorithm algorithm;
-					//algorithm = new RandomAlgorithm();
-					algorithm = new CelfAlgorithm();
-					//algorithm.maximize(sn, spread, propModel, 5);
-					
 					WSocialAnalytics window = new WSocialAnalytics();
 					window.frmSocialAnalytics.setVisible(true);
 				} catch (Exception e) {
@@ -192,23 +172,25 @@ public class WSocialAnalytics {
 	private void initialize() {
 		frmSocialAnalytics = new JFrame();
 		frmSocialAnalytics.setTitle("Social Analytics");
-		frmSocialAnalytics.setBounds(100, 100, 450, 550);
+		frmSocialAnalytics.setBounds(100, 100, 776, 550);
 		frmSocialAnalytics.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSocialAnalytics.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmSocialAnalytics.setJMenuBar(menuBar);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWidths = new int[]{0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		frmSocialAnalytics.getContentPane().setLayout(gridBagLayout);
 		
 		panelFile = new JPanel();
 		panelFile.setBorder(new TitledBorder(null, "Archivo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelFile = new GridBagConstraints();
-		gbc_panelFile.insets = new Insets(0, 0, 5, 0);
-		gbc_panelFile.fill = GridBagConstraints.BOTH;
+		gbc_panelFile.anchor = GridBagConstraints.NORTH;
+		gbc_panelFile.insets = new Insets(0, 0, 5, 5);
+		gbc_panelFile.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelFile.gridx = 0;
 		gbc_panelFile.gridy = 0;
 		frmSocialAnalytics.getContentPane().add(panelFile, gbc_panelFile);
@@ -310,8 +292,9 @@ public class WSocialAnalytics {
 		panelPropagation = new JPanel();
 		panelPropagation.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Propagacion", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_panelPropagation = new GridBagConstraints();
-		gbc_panelPropagation.insets = new Insets(0, 0, 5, 0);
-		gbc_panelPropagation.fill = GridBagConstraints.BOTH;
+		gbc_panelPropagation.anchor = GridBagConstraints.NORTH;
+		gbc_panelPropagation.insets = new Insets(0, 0, 5, 5);
+		gbc_panelPropagation.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelPropagation.gridx = 0;
 		gbc_panelPropagation.gridy = 1;
 		frmSocialAnalytics.getContentPane().add(panelPropagation, gbc_panelPropagation);
@@ -375,8 +358,9 @@ public class WSocialAnalytics {
 		panelMaximizacion = new JPanel();
 		panelMaximizacion.setBorder(new TitledBorder(null, "Maximizacion", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelMaximizacion = new GridBagConstraints();
-		gbc_panelMaximizacion.insets = new Insets(0, 0, 5, 0);
-		gbc_panelMaximizacion.fill = GridBagConstraints.BOTH;
+		gbc_panelMaximizacion.anchor = GridBagConstraints.NORTH;
+		gbc_panelMaximizacion.insets = new Insets(0, 0, 5, 5);
+		gbc_panelMaximizacion.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelMaximizacion.gridx = 0;
 		gbc_panelMaximizacion.gridy = 2;
 		frmSocialAnalytics.getContentPane().add(panelMaximizacion, gbc_panelMaximizacion);
@@ -446,6 +430,8 @@ public class WSocialAnalytics {
 		
 		panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.anchor = GridBagConstraints.NORTH;
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 3;
@@ -473,6 +459,21 @@ public class WSocialAnalytics {
 		gbc_btnPropagate.gridy = 0;
 		panel.add(btnPropagate, gbc_btnPropagate);
 		btnPropagate.setEnabled(false);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setViewportBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		scrollPane.getViewport().setBackground(Color.WHITE);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.gridheight = 5;
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 0;
+		frmSocialAnalytics.getContentPane().add(scrollPane, gbc_scrollPane);
+		
+		lblImage = new JLabel("");
+		lblImage.setBackground(Color.WHITE);
+		scrollPane.setViewportView(lblImage);
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		btnPropagate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				propagate();
@@ -555,6 +556,8 @@ public class WSocialAnalytics {
 		long end = System.currentTimeMillis();
 		long tiempoProcesamiento = end - begin;
 		log.warn("Spread calculado: " + spread + "(" + tiempoProcesamiento + "ms)");
+		
+		lblImage.setIcon(new ImageIcon(GraphViz.getImagen(out.getPath())));
 	}
 
 	protected void openFile() {
