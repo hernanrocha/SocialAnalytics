@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -55,6 +57,7 @@ import thread.MaximizerWorker;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JProgressBar;
@@ -62,6 +65,9 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 public class WSocialAnalytics implements PropertyChangeListener {	
 
@@ -107,6 +113,14 @@ public class WSocialAnalytics implements PropertyChangeListener {
 	private JLabel labelSeedSize;
 	private JLabel lblImage;
 	private JScrollPane scrollPane;
+	private JLabel lblTiempoDeCalculo;
+
+	private long beginAlgorithm;
+	private JLabel labelPropagacion;
+	private JMenu mnArchivo;
+	private JMenuItem mntmAutomatizar;
+	private JSeparator separator;
+	private JMenuItem mntmSalir;
 
 	/**
 	 * Launch the application.
@@ -157,8 +171,6 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		}
 		
 		initialize();
-		
-		automate();
 	}
 
 	private void automate() {
@@ -182,6 +194,30 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmSocialAnalytics.setJMenuBar(menuBar);
+		
+		mnArchivo = new JMenu("Archivo");
+		menuBar.add(mnArchivo);
+		
+		mntmAutomatizar = new JMenuItem("Automatizar");
+		mntmAutomatizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				automate();
+			}
+		});
+		mntmAutomatizar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+		mnArchivo.add(mntmAutomatizar);
+		
+		separator = new JSeparator();
+		mnArchivo.add(separator);
+		
+		mntmSalir = new JMenuItem("Salir");
+		mntmSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmSocialAnalytics.dispose();
+			}
+		});
+		mntmSalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
+		mnArchivo.add(mntmSalir);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
@@ -255,7 +291,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		panelFile.add(lblLineParser, gbc_lblLineParser);
 		
 		comboLineParser = new JComboBox();
-		comboLineParser.setModel(new DefaultComboBoxModel<String>(new String[] {"Simple", "Facebook Circles", "Subset (500)"}));
+		comboLineParser.setModel(new DefaultComboBoxModel(new String[] {"Simple", "Facebook Circles", "Subset (2000)"}));
 		GridBagConstraints gbc_comboLineParser = new GridBagConstraints();
 		gbc_comboLineParser.gridwidth = 2;
 		gbc_comboLineParser.insets = new Insets(0, 0, 5, 0);
@@ -370,12 +406,12 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		frmSocialAnalytics.getContentPane().add(panelMaximizacion, gbc_panelMaximizacion);
 		GridBagLayout gbl_panelMaximizacion = new GridBagLayout();
 		gbl_panelMaximizacion.columnWidths = new int[]{100, 100, 100, 0, 0};
-		gbl_panelMaximizacion.rowHeights = new int[]{14, 0, 0, 0};
+		gbl_panelMaximizacion.rowHeights = new int[]{14, 0, 0, 0, 0};
 		gbl_panelMaximizacion.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_panelMaximizacion.rowWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelMaximizacion.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelMaximizacion.setLayout(gbl_panelMaximizacion);
 		
-		btnMaximize = new JButton("Maximize");
+		btnMaximize = new JButton("Maximizar");
 		btnMaximize.setEnabled(false);
 		btnMaximize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -383,7 +419,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 			}
 		});
 		
-		labelSeedSize = new JLabel("Seed Size");
+		labelSeedSize = new JLabel("Seeds");
 		GridBagConstraints gbc_labelSeedSize = new GridBagConstraints();
 		gbc_labelSeedSize.anchor = GridBagConstraints.EAST;
 		gbc_labelSeedSize.insets = new Insets(0, 0, 5, 5);
@@ -416,7 +452,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		gbc_comboMaximizationAlgorithm.gridy = 0;
 		panelMaximizacion.add(comboMaximizationAlgorithm, gbc_comboMaximizationAlgorithm);
 		comboMaximizationAlgorithm.setModel(new DefaultComboBoxModel<String>(new String[] {"Random", "Greedy", "CELF", "CELF ++"}));
-		comboMaximizationAlgorithm.setSelectedIndex(0);
+		comboMaximizationAlgorithm.setSelectedIndex(1);
 		
 		progressGreedy = new JProgressBar();
 		progressGreedy.setStringPainted(true);
@@ -428,10 +464,20 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		gbc_progressGreedy.gridy = 1;
 		panelMaximizacion.add(progressGreedy, gbc_progressGreedy);
 		GridBagConstraints gbc_btnMaximize = new GridBagConstraints();
+		gbc_btnMaximize.insets = new Insets(0, 0, 5, 0);
 		gbc_btnMaximize.gridwidth = 4;
 		gbc_btnMaximize.gridx = 0;
 		gbc_btnMaximize.gridy = 2;
 		panelMaximizacion.add(btnMaximize, gbc_btnMaximize);
+		
+		lblTiempoDeCalculo = new JLabel("");
+		lblTiempoDeCalculo.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_lblTiempoDeCalculo = new GridBagConstraints();
+		gbc_lblTiempoDeCalculo.gridwidth = 4;
+		gbc_lblTiempoDeCalculo.anchor = GridBagConstraints.WEST;
+		gbc_lblTiempoDeCalculo.gridx = 0;
+		gbc_lblTiempoDeCalculo.gridy = 3;
+		panelMaximizacion.add(lblTiempoDeCalculo, gbc_lblTiempoDeCalculo);
 		
 		panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -444,14 +490,14 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		panel.setBorder(new TitledBorder(null, "Seed Set", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0};
 		gbl_panel.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		lblSeedSet = new JTextField();
 		GridBagConstraints gbc_lblSeedSet = new GridBagConstraints();
-		gbc_lblSeedSet.insets = new Insets(0, 0, 0, 5);
+		gbc_lblSeedSet.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSeedSet.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblSeedSet.gridx = 0;
 		gbc_lblSeedSet.gridy = 0;
@@ -460,10 +506,21 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		
 		btnPropagate = new JButton("Propagar");
 		GridBagConstraints gbc_btnPropagate = new GridBagConstraints();
+		gbc_btnPropagate.insets = new Insets(0, 0, 5, 0);
 		gbc_btnPropagate.gridx = 1;
 		gbc_btnPropagate.gridy = 0;
 		panel.add(btnPropagate, gbc_btnPropagate);
 		btnPropagate.setEnabled(false);
+		
+		labelPropagacion = new JLabel("");
+		labelPropagacion.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_labelPropagacion = new GridBagConstraints();
+		gbc_labelPropagacion.anchor = GridBagConstraints.WEST;
+		gbc_labelPropagacion.gridwidth = 2;
+		gbc_labelPropagacion.insets = new Insets(0, 0, 0, 5);
+		gbc_labelPropagacion.gridx = 0;
+		gbc_labelPropagacion.gridy = 1;
+		panel.add(labelPropagacion, gbc_labelPropagacion);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setViewportBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -491,7 +548,9 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		});
 	}
 
-	protected void maximize() {		
+	protected void maximize() {
+		beginAlgorithm = System.currentTimeMillis();
+		
 		Integer n = (Integer) spinnerSeedSize.getValue();
 		PropagationModel propModel = propagationModels.elementAt(comboPropagationModel.getSelectedIndex());
 		SpreadCalculator spreadCalculator = spreadCalculators.elementAt(comboSpreadCalculator.getSelectedIndex());
@@ -544,8 +603,9 @@ public class WSocialAnalytics implements PropertyChangeListener {
 
 		long end = System.currentTimeMillis();
 		long tiempoProcesamiento = end - begin;
-		log.warn("Spread calculado: " + spread + "(" + tiempoProcesamiento + "ms)");
+		log.warn("Spread calculado: " + spread + " (" + tiempoProcesamiento + "ms)");
 		
+		labelPropagacion.setText("Propagacion: " + spread);
 		lblImage.setIcon(new ImageIcon(GraphViz.getImagen(out.getPath())));
 	}
 
@@ -606,10 +666,10 @@ public class WSocialAnalytics implements PropertyChangeListener {
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		if (arg0.getPropertyName().toString().equals("state") && arg0.getNewValue().toString().equals("DONE")) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().toString().equals("state") && evt.getNewValue().toString().equals("DONE")) {
 			try {
-				Set<Vertex> optimalSeedSet = ((MaximizationAlgorithm) arg0.getSource()).get();
+				Set<Vertex> optimalSeedSet = ((MaximizationAlgorithm) evt.getSource()).get();
 				
 				log.info("Optimal Seed Set: " + optimalSeedSet);
 				
@@ -619,6 +679,18 @@ public class WSocialAnalytics implements PropertyChangeListener {
 					str += v.toString() + " ";
 				}
 				lblSeedSet.setText(str);
+				
+				long end = System.currentTimeMillis();
+				long tiempoProcesamiento = end - beginAlgorithm;
+				
+				String strProces = "";
+				if (tiempoProcesamiento < 1000) {
+					strProces += tiempoProcesamiento + "ms";
+				} else {
+					strProces += (tiempoProcesamiento / 1000) + "s";
+				}
+				lblTiempoDeCalculo.setText("Tiempo de calculo: " + strProces);
+				
 				propagate();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
