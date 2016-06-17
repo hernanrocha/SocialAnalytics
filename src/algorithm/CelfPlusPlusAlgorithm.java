@@ -59,10 +59,7 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 			log.trace("Revisar: " + u.vertex);
 			System.out.println("Revisar: " + u.vertex);
 			if (u.flag == S.size()) {
-				log.trace(" Agregar: " + u.vertex);
-				System.out.println(" Seleccionar: " + u.vertex);
-				System.out.println("---------------------------------------");
-				log.trace("---------------------------------------");
+				log.warn(" - Seleccionar: " + u.vertex);
 				S.add(u.vertex);
 				Q.remove(Q.last()); // Pop
 				last_seed = u;
@@ -73,7 +70,6 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 					u.mg1 = u.mg2;
 				} else {
 					log.trace(" - Calcular marginal");
-					System.out.println(" - Calcular marginal");
 					u.mg1 = getMarginal(sn, spread, model, S, u.vertex); //delta u (S);
 					u.prev_best = cur_best;
 					S.add(cur_best.vertex);

@@ -44,7 +44,7 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 			j++;
 		}
 		
-		log.warn("Elijo " + marginals.last().getVertex() + " (marginal " + marginals.last().getMarginal() + ")");
+		log.warn("Seleccionar " + marginals.last().getVertex() + " (marginal " + marginals.last().getMarginal() + ")");
 		solution.add(marginals.last().getVertex());
 		marginals.remove(marginals.last());
 		int i = 1;
