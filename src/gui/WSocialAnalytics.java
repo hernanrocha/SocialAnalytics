@@ -44,6 +44,7 @@ import parser.FileParser;
 import parser.LineParser;
 import parser.SimpleFileParser;
 import parser.SimpleLineParser;
+import parser.SubsetLineParser;
 import propagation.IndependentCascadeModel;
 import propagation.LinearThresholdModel;
 import propagation.PropagationModel;
@@ -134,6 +135,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		lineParsers = new Vector<LineParser>();
 		lineParsers.add(new SimpleLineParser());
 		lineParsers.add(new FbCircleLineParser());		
+		lineParsers.add(new SubsetLineParser());
 
 		propagationModels = new Vector<PropagationModel>();
 		propagationModels.add(new LinearThresholdModel());
@@ -253,7 +255,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		panelFile.add(lblLineParser, gbc_lblLineParser);
 		
 		comboLineParser = new JComboBox();
-		comboLineParser.setModel(new DefaultComboBoxModel<String>(new String[] {"Simple", "Facebook Circles"}));
+		comboLineParser.setModel(new DefaultComboBoxModel<String>(new String[] {"Simple", "Facebook Circles", "Subset (500)"}));
 		GridBagConstraints gbc_comboLineParser = new GridBagConstraints();
 		gbc_comboLineParser.gridwidth = 2;
 		gbc_comboLineParser.insets = new Insets(0, 0, 5, 0);

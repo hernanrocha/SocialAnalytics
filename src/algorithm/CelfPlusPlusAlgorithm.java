@@ -27,7 +27,7 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 		CelfPlusPlusVertex last_seed = null;
 		CelfPlusPlusVertex cur_best = null;
 
-		for (Vertex v : sn.getVertices()) {
+		for (Vertex v : vertices) {
 			CelfPlusPlusVertex u = new CelfPlusPlusVertex(v);
 			Set<Vertex> seed = new HashSet<Vertex>();
 			seed.add(v);
