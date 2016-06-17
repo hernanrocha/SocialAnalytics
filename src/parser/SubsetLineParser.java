@@ -12,7 +12,7 @@ public class SubsetLineParser extends LineParser {
 	
 	static Logger log = Logger.getLogger(SubsetLineParser.class.getName());
 
-	private static final Integer MAX_ID = 500;
+	private static final Integer MAX_ID = 2000;
 
 	@Override
 	public void parseLine(SocialNetwork sn, String line) {

@@ -29,7 +29,7 @@ public class GreedyAlgorithm extends MaximizationAlgorithm {
 
 			int j = 1;
 			for (Vertex vertex : vertices) {
-				int a = j * 100 + i * vertices.size();
+				int a = (j + i * vertices.size()) * 100;
 				int b = vertices.size() * n;
 				updateProgress(a / b);
 				

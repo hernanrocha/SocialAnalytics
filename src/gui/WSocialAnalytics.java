@@ -263,7 +263,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		gbc_comboLineParser.gridx = 1;
 		gbc_comboLineParser.gridy = 2;
 		panelFile.add(comboLineParser, gbc_comboLineParser);
-		comboLineParser.setSelectedIndex(0);
+		comboLineParser.setSelectedIndex(2);
 		
 		btnParse = new JButton("Parsear");
 		GridBagConstraints gbc_btnParse = new GridBagConstraints();
@@ -416,6 +416,7 @@ public class WSocialAnalytics implements PropertyChangeListener {
 		gbc_comboMaximizationAlgorithm.gridy = 0;
 		panelMaximizacion.add(comboMaximizationAlgorithm, gbc_comboMaximizationAlgorithm);
 		comboMaximizationAlgorithm.setModel(new DefaultComboBoxModel<String>(new String[] {"Random", "Greedy", "CELF", "CELF ++"}));
+		comboMaximizationAlgorithm.setSelectedIndex(0);
 		
 		progressGreedy = new JProgressBar();
 		progressGreedy.setStringPainted(true);

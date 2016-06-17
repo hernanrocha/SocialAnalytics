@@ -27,6 +27,7 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 		CelfPlusPlusVertex last_seed = null;
 		CelfPlusPlusVertex cur_best = null;
 
+		int j = 1;
 		for (Vertex v : vertices) {
 			CelfPlusPlusVertex u = new CelfPlusPlusVertex(v);
 			Set<Vertex> seed = new HashSet<Vertex>();
@@ -35,36 +36,57 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 			u.prev_best = cur_best;
 			if (cur_best != null) {
 				seed.add(cur_best.vertex);
-				u.mg2 = spread.calculateSpread(sn, seed, model);
+				u.mg2 = spread.calculateSpread(sn, seed, model) - u.mg1;
 			} else {
 				u.mg2 = u.mg1;
 			}
 			u.flag = 0;
 
 			Q.add(u);
-			cur_best = (cur_best.mg1 < u.mg1) ? u : cur_best;
+			
+			if (cur_best == null || cur_best.mg1 < u.mg1) {
+				cur_best = u;
+			}
+			
+			int a = j * 100;
+			int b = vertices.size() * n;
+			updateProgress(a / b);
+			j++;
 		}
 
 		while (S.size() < n) {
 			CelfPlusPlusVertex u = Q.last();
+			log.trace("Revisar: " + u.vertex);
+			System.out.println("Revisar: " + u.vertex);
 			if (u.flag == S.size()) {
+				log.trace(" Agregar: " + u.vertex);
+				System.out.println(" Seleccionar: " + u.vertex);
+				System.out.println("---------------------------------------");
+				log.trace("---------------------------------------");
 				S.add(u.vertex);
-				Q.remove(u); // Pop
+				Q.remove(Q.last()); // Pop
 				last_seed = u;
-				continue;
-			} else if (u.prev_best == last_seed) {
-				u.mg1 = u.mg2;
-			} else {
-				u.mg1 = getMarginal(sn, spread, model, S, u.vertex); //delta u (S);
-				u.prev_best = cur_best;
-				S.add(cur_best.vertex);
-				u.mg2 = getMarginal(sn, spread, model, S, u.vertex); // delta u ( S U {cur_best});
-				S.remove(cur_best.vertex);
+			} else { 
+				if (u.prev_best == last_seed) {
+					log.trace(" - Marginal ya calculada");
+					System.out.println(" - Marginal ya calculada");
+					u.mg1 = u.mg2;
+				} else {
+					log.trace(" - Calcular marginal");
+					System.out.println(" - Calcular marginal");
+					u.mg1 = getMarginal(sn, spread, model, S, u.vertex); //delta u (S);
+					u.prev_best = cur_best;
+					S.add(cur_best.vertex);
+					u.mg2 = getMarginal(sn, spread, model, S, u.vertex); // delta u ( S U {cur_best});
+					S.remove(cur_best.vertex);
+				}
+				u.flag = S.size();
+				cur_best = (cur_best.mg1 < u.mg1) ? u : cur_best; // Update cur_best
+				Q.remove(Q.last());
+				Q.add(u); // Reinsertar u en Q y heapify
 			}
-			u.flag = S.size();
-			cur_best = (cur_best.mg1 < u.mg1) ? u : cur_best; // Update cur_best
-			Q.remove(u);
-			Q.add(u); // Reinsertar u en Q y heapify
+
+			updateProgress(S.size() * 100 / n);
 		}
 		
 		return S;

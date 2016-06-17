@@ -25,7 +25,7 @@ public class CelfVertex implements Comparable<CelfVertex> {
 		int comp = marginal.compareTo(other.getMarginal());
 		
 		if (comp == 0) {
-			return vertex.getID().compareTo(other.getVertex().getID());
+			return vertex.getID().compareTo(other.getVertex().getID()) * -1;
 		}
 		
 		return comp;

@@ -73,7 +73,7 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 				marginals.add(new CelfVertex(last.getVertex(), newMarginal));
 			}
 			
-			//updateProgress(i * 100 / n);
+			updateProgress(i * 100 / n);
 		}
 		
 		log.warn("Finalizado");
