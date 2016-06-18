@@ -27,14 +27,15 @@ public class CelfPlusPlusVertex implements Comparable<CelfPlusPlusVertex> {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
 		CelfPlusPlusVertex other = (CelfPlusPlusVertex) obj;
-		if (vertex == null) {
-			if (other.vertex != null)
-				return false;
-		} else if (!vertex.equals(other.vertex))
+//		if (vertex == null) {
+//			if (other.vertex != null)
+//				return false;
+		if (!vertex.equals(other.vertex))
 			return false;
+		
 		return true;
 	}
 

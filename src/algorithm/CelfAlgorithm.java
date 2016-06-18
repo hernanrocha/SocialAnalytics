@@ -50,33 +50,31 @@ public class CelfAlgorithm extends MaximizationAlgorithm {
 		int i = 1;
 
 		while (i < n){
-			log.warn(i + " de " + n);
+			log.trace(i + " de " + n);
 			
 			// Obtener el vertice con mayor ganancia marginal
 			CelfVertex last = marginals.last();
 			marginals.remove(last);
 			
 			// Algoritmo de calculo de spread para calcular marginal
-			log.warn("Solution: " + solution);
-			log.warn("Vertex: " + last.getVertex());
+			log.trace("Solution: " + solution);
+			log.trace("Vertex: " + last.getVertex());
 			Double newMarginal = getMarginal(sn, spread, model, solution, last.getVertex());
-			log.warn("Marginal: " + newMarginal);
+			log.trace("Marginal: " + newMarginal);
 			
 			if (newMarginal >= marginals.last().getMarginal()) {
 				// Si sigue siendo la mejor, agregar al conjunto solution
-				log.warn("Elijo " + last.getVertex() + " (marginal " + last.getMarginal() + ")");
+				log.warn("Seleccionar " + last.getVertex() + " (marginal " + last.getMarginal() + ")");
 				solution.add(last.getVertex());
 				i++;
 			} else {
 				// Devolverlo a la lista con la ganancia marginal actualizada
-				log.warn(" Actualizo " + last.getVertex());
+				log.trace(" Actualizar " + last.getVertex());
 				marginals.add(new CelfVertex(last.getVertex(), newMarginal));
 			}
 			
 			updateProgress(i * 100 / n);
 		}
-		
-		log.warn("Finalizado");
 		
 		return solution;
 	}

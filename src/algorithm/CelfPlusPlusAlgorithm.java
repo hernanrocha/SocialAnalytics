@@ -56,30 +56,47 @@ public class CelfPlusPlusAlgorithm extends MaximizationAlgorithm {
 
 		while (S.size() < n) {
 			CelfPlusPlusVertex u = Q.last();
+			
+			// Eliminar elemento. Si no se selecciona, luego se reinsertara en la posicion correspondiente
+			if (!Q.remove(Q.last())) {
+				log.error("Error al eliminar");				
+			}
+			
 			log.trace("Revisar: " + u.vertex);
-			System.out.println("Revisar: " + u.vertex);
 			if (u.flag == S.size()) {
-				log.warn(" - Seleccionar: " + u.vertex);
-				S.add(u.vertex);
-				Q.remove(Q.last()); // Pop
+				Vertex v = u.vertex;
+				log.warn(" - Seleccionar: " + v + "(marginal " + u.mg1 + ")");
+				S.add(v);
 				last_seed = u;
+				cur_best = null;
 			} else { 
 				if (u.prev_best == last_seed) {
 					log.trace(" - Marginal ya calculada");
-					System.out.println(" - Marginal ya calculada");
 					u.mg1 = u.mg2;
 				} else {
 					log.trace(" - Calcular marginal");
 					u.mg1 = getMarginal(sn, spread, model, S, u.vertex); //delta u (S);
 					u.prev_best = cur_best;
-					S.add(cur_best.vertex);
-					u.mg2 = getMarginal(sn, spread, model, S, u.vertex); // delta u ( S U {cur_best});
-					S.remove(cur_best.vertex);
+					
+					if (cur_best != null){
+						S.add(cur_best.vertex);
+						u.mg2 = getMarginal(sn, spread, model, S, u.vertex); // delta u ( S U {cur_best});
+						S.remove(cur_best.vertex);
+					} else {
+						u.mg2 = u.mg1;
+					}
 				}
 				u.flag = S.size();
-				cur_best = (cur_best.mg1 < u.mg1) ? u : cur_best; // Update cur_best
-				Q.remove(Q.last());
-				Q.add(u); // Reinsertar u en Q y heapify
+				
+				// Update cur_best
+				if (cur_best == null || cur_best.mg1 < u.mg1) {
+					cur_best = u;
+				}
+
+				// Reinsertar u en Q
+				if(!Q.add(u)) {
+					log.error("Error al reinsertar");
+				}
 			}
 
 			updateProgress(S.size() * 100 / n);
